@@ -5,8 +5,6 @@ from sklearn.preprocessing import LabelEncoder, StandardScaler
 import numpy as np
 import random
 from sklearn.model_selection import train_test_split
-import matplotlib.pyplot as plt
-from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 
 
 class Model:
@@ -18,10 +16,6 @@ class Model:
         self.cfg = cfg
 
         self.val_fold_scores_ = []
-
-        self.y_test = []
-        self.y_pred = []
-
 
     def train_kfold(self):
 
@@ -38,22 +32,4 @@ class Model:
         fold_acc = accuracy_score(y_test, y_pred)
         self.val_fold_scores_.append(fold_acc)
 
-        #self.y_test = y_test
-        #self.y_pred = y_pred
-
-        
-        cm = confusion_matrix(y_test,y_pred)
-        disp = ConfusionMatrixDisplay(confusion_matrix=cm)
-        disp.plot()
-        plt.show
-
-        from sklearn.metrics import classification_report
-        print(classification_report(y_test, y_pred))
-
         return self.val_fold_scores_
-
-    def matrix(self):
-        cm = confusion_matrix(self.y_test, self.y_pred)
-        disp = ConfusionMatrixDisplay(confusion_matrix=cm)
-        disp.plot()
-        plt.show
