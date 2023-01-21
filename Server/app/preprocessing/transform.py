@@ -71,6 +71,8 @@ class AudioTransform:
         return data
 
     def mel_freq(self):
-        mfccs = librosa.feature.mfcc(self.waveform, sr=self.sample_rate, dct_type=2)
+        mfccs = librosa.feature.mfcc(self.waveform, sr=self.sample_rate, dct_type=2,n_mfcc=100)
         data = librosa.power_to_db(mfccs)
+        # Displaying  the MFCCs:
+        # librosa.display.specshow(mfccs, sr=sample, x_axis='mel',cmap = 'magma')
         return data, mfccs
