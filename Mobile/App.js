@@ -1,5 +1,7 @@
 import * as React from 'react';
-import { Text, View, StyleSheet, Button } from 'react-native';
+import {   SafeAreaView,StyleSheet,View,Text,Image,TouchableOpacity, } from 'react-native';
+
+
 import { Audio } from 'expo-av';
 import * as DocumentPicker from 'expo-document-picker';
 import * as Sharing from 'expo-sharing';
@@ -10,8 +12,10 @@ import mime from "mime";
 var uri = ""
 // var pasrsedata = ""
 const App = () => {
+  let state='unknow'
   const [recording, setRecording] = React.useState();
-  const [pasrsedata,setParsedata] = React.useState('');
+  const [pasrsedata,setParsedata] = React.useState("unknow");
+  const [clickbutton,setClickbutton] = React.useState("Start record")
   // const  [uri] = React.useState("");
 
   startRecording = async () => {
@@ -70,24 +74,6 @@ const App = () => {
     console.log('Recording stopped and stored at', uri);
   }
 
-  // Mediasave = async () => {
-
-  //   // try {
-  //   //   FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'app_docs/', { intermediates: true });
-  //   //   FileSystem.moveAsync(uri,FileSystem.documentDirectory + 'app_docs/' + 'test.wav')
-  //   // }catch (err) {
-  //   //   console.error('Failed to start recording', err);
-  //   // }
-  //   // console.log("read all file")
-  //   // FileSystem.readDirectoryAsync(FileSystem.readAsStringAsync + 'app_docs/' + 'test.wav', { encoding: FileSystem.EncodingType.Base64 }).then(files => ()
-     
-  //   //   // console.log(files)
-    
-  //   // )
-
-  // }
-
-
   Upload = async () => {
     
     let SoundFileUri = await "file:/" + uri.split("file:///").join("");
@@ -104,9 +90,9 @@ const App = () => {
  
      });
     console.log(formdata);
+    // `http://192.168.1.10:8080/infantcry`
 
-
-    await fetch(`http://192.168.1.10:8080/infantcry`, {
+    await fetch(`http://34.102.29.130/infantcry`, {
 
         method:'POST',
 
@@ -119,8 +105,12 @@ const App = () => {
     }
     ).then(response => response.text())
     .then(result => {
-      console.log(result)
+      const data =  JSON.parse(result)
+      const reason = data.Reason.substring(20)
+      console.log(data)
+      // str.substring()
       // pasrsedata = JSON.parse(result)
+      setParsedata(reason)
       // setParsedata("String")
       // console.log(result)
       // console.log(pasrsedata)
@@ -132,18 +122,73 @@ const App = () => {
 
     }
 
+    HandlePress = () => {
+      setClickbutton(clickbutton === 'Start record' ? 'Stop record' : 'Start record');
+      if (clickbutton === 'Start record') {
+        
+        this.startRecording()
+      }
+      if(clickbutton === 'Stop record'){
+        this.stopRecording()
+      }
+    };
+
+  // return (
+  //   <View style={styles.container}>
+  //     <Button
+  //       title={recording ? 'Stop Recording' : 'Start Recording'}
+  //       onPress={recording ? stopRecording : startRecording}
+  //     />
+  //     <Text>{uri}</Text>
+  //      <Button style={styles.button} onPress={ this.Mediasave } title="Share"></Button>
+  //      {/* <Button style={styles.button} onPress={ this.upload } title="upload"></Button> */}
+  //      <Button title="upload to server" onPress={this.Upload}/>
+  //      {/* <Text>{pasrsedata.Reason}</Text> */}
+  //   </View>
+  // );
+
   return (
-    <View style={styles.container}>
-      <Button
-        title={recording ? 'Stop Recording' : 'Start Recording'}
-        onPress={recording ? stopRecording : startRecording}
-      />
-      <Text>{uri}</Text>
-       <Button style={styles.button} onPress={ this.Mediasave } title="Share"></Button>
-       {/* <Button style={styles.button} onPress={ this.upload } title="upload"></Button> */}
-       <Button title="upload to server" onPress={this.Upload}/>
-       {/* <Text>{pasrsedata.Reason}</Text> */}
-    </View>
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={styles.container}>
+
+        {/* <Image source={{
+          uri: 'https://png.pngtree.com/thumb_back/fh260/background/20200821/pngtree-simple-light-blue-background-image_396574.jpg',
+        }}  style={styles.decorationImage1} /> */}
+
+        <Image source={{
+          uri: 'https://wallpaperaccess.com/full/676550.jpg',
+        }}  style={styles.decorationImage2} />
+
+        <Image source={{
+          uri: 'https://cdn.discordapp.com/attachments/1008653692653797418/1053326691856039936/image.png',
+        }}  style={styles.decorationImage3} />
+
+
+        <Text style={styles.Topic}>
+          INFANT CRYING
+        </Text>
+
+        <Text style={styles.Reason}>
+        👶🏻 Baby Cry Because 
+        </Text>
+
+        <Text style={styles.State}>
+         {pasrsedata}
+        </Text>
+
+        <TouchableOpacity style={styles.button1} 
+        activeOpacity={0.8} onPress= {HandlePress} >
+          <Text style={styles.buttonTextStyle1}>{clickbutton}</Text>
+        </TouchableOpacity>
+
+
+        <TouchableOpacity style={styles.button2} 
+        activeOpacity={0.8} onPress={this.Upload}  >
+          <Text style={styles.buttonTextStyle2}>Predict Crying</Text>
+        </TouchableOpacity>
+
+      </View>
+    </SafeAreaView>
   );
 }
 
@@ -152,8 +197,91 @@ export default App;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    margin: 10,
+    marginTop: 30,
+    alignItems: 'center',
+    backgroundColor: '#4361EE'
+    //padding: 80,
+  },
+  decorationImage1: {
+    width: 10000,
+    height: 10000,
+    position: 'absolute',
+  },
+  decorationImage2: {
+    width: 414,
+    height: 1000,
+    position: 'absolute',
+    top:150,
+    borderRadius: 65,
+  },
+  decorationImage3: {
+    width: 150,
+    height: 150,
+    position: 'absolute',
+    top:80,
+    borderRadius: 100,
+  },
+  button1: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#4361EE',
+    borderWidth: 0.5,
+    borderColor: '#fff',
+    height: 64,
+    width: 220,
+    borderRadius: 20,
+    marginTop: 400,
+    //marginleft:20
+  },
+  buttonTextStyle1: {
+    color: 'white',
+    marginBottom: 4,
+    marginLeft: 55,
     justifyContent: 'center',
-    backgroundColor: '#ecf0f1',
-    padding: 10,
+    fontSize:20,
+    fontWeight: 'bold'
+  },
+  button2: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F72585',
+    borderWidth: 0.5,
+    borderColor: '#fff',
+    height: 64,
+    width: 220,
+    borderRadius: 20,
+    marginTop: 40,
+  },
+buttonTextStyle2: {
+    color: 'white',
+    marginBottom: 4,
+    marginLeft: 44,
+    justifyContent: 'center',
+    fontSize:20,
+    fontWeight: 'bold'
+  },
+  Topic: {
+    color: 'white',
+    fontSize : 34,
+    fontWeight: 'bold',
+    position: 'absolute',
+    margin:10,
+    top: 10,  
+  },
+  Reason: {
+    color: 'black',
+    fontSize : 28,
+    fontWeight: 'bold',
+    position: 'absolute',
+    top: 235,  
+  },
+  State: {
+    color: 'black',
+    fontSize : 38,
+    fontWeight: 'bold',
+    position: 'absolute',
+    top: 300,  
   },
 });
+

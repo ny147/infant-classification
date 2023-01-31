@@ -26,11 +26,6 @@ class AudioFeature:
 
     def load_audio_files(self,audio_filename):
 
-        # walker = sorted(str(p) for p in Path(self.src_path).glob(f'*.wav'))
-        # for i, file_path in enumerate(walker):
-        #     path, filename = os.path.split(file_path)
-        #     speaker, _ = os.path.splitext(filename)
-
         # Load audio
         self.audio_filename = audio_filename
         file_path = f'{self.sound_dir}/{self.audio_filename}'
@@ -38,15 +33,17 @@ class AudioFeature:
         self.audio_segment = AudioSegment.from_file(file_path)
 
 
-    def create_image_audio(self,audio_filename,typeimg):
+    def create_image_audio(self,typeimg,phase_no):
 
-        ## load audio
-        self.load_audio_files(audio_filename)
+       
 
         # create image_dir
-        Path(f'./{self.image_dir}').mkdir(parents=True, exist_ok=True)
+        # create folder if path does not exit
+        Path(f'./{self.image_dir}/type_{phase_no}').mkdir(parents=True, exist_ok=True)
+        
 
-        ## Create Transform obj
+        
+        # Create Transform obj
         audiotransform = AudioTransform()
         audiotransform.set_waveform(self.waveform)
         audiotransform.set_sample_rate(self.sample_rate)
@@ -61,19 +58,42 @@ class AudioFeature:
             spectrogram = audiotransform.zero_crossing()
         elif typeimg == 'mel_freq':
             data, spectrogram = audiotransform.mel_freq()
-        librosa.display.specshow(spectrogram, sr=self.sample_rate, x_axis='time')
+        elif typeimg == 'waveform':
+            timescale = np.arange(waveform .shape[0])
+            fast_fourier_transf = np.fft.fft(waveform)
+            plt.plot(timescale, fast_fourier_transf,color = 'k')
+        if typeimg != 'waveform':
+            librosa.display.specshow(spectrogram, sr=self.sample_rate, x_axis='time')
         plt.axis('off')
 
 
         # save img
-        self.image_file =  f'./{self.image_dir}/2.jpg'
+        self.image_file =  f'./{self.image_dir}/type_{phase_no}/Temp.jpg'
         plt.savefig(self.image_file,bbox_inches="tight", pad_inches=0)
         plt.clf()
 
-    def load_audio_predict(self):
+    def load_audio_predict(self,phase_no):
 
-        image_ds = tf.keras.preprocessing.image_dataset_from_directory(self.image_dir, labels= None , label_mode=None, image_size=(256, 256),
-        validation_split=None, subset=None)
+        ## load audio
+        # self.load_audio_files(audio_filename)
+        
+        try:
+            if   (phase_no == 1):
+                self.create_image_audio(typeimg='mel_freq',phase_no=1)
+            elif (phase_no == 2):
+                self.create_image_audio(typeimg='mel_spectrogram',phase_no=2)
+            else :
+                raise NameError('phase_no')
+        except NameError:
+            print("phase_no must be 1 or 2")
+            raise
+
+        # image_ds = tf.keras.preprocessing.image_dataset_from_directory(f'./{self.image_dir}/{phase_no}', labels= None , label_mode=None, image_size=(256, 256),
+        # validation_split=None, subset=None)
+        
+        # image_ds = tf.keras.preprocessing.image_dataset_from_directory( f'./{self.image_dir}/{phase_no}', labels='inferred', label_mode='int', image_size=(432, 288), seed=321,validation_split=None, subset=None)
+        image_ds = tf.keras.preprocessing.image_dataset_from_directory( f'./{self.image_dir}/type_{phase_no}', labels= None, label_mode= None, image_size=(432, 288), seed=321,validation_split=None, subset=None)
+        
 
 
         sound_predict = np.array(list(image_ds.unbatch().as_numpy_iterator()))
