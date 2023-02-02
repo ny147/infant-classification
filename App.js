@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useRef, useEffect } from 'react';
-import {   SafeAreaView,StyleSheet,View,Text,Image,TouchableOpacity, } from 'react-native';
+import {   SafeAreaView,StyleSheet,View,Text,Image,TouchableOpacity,Alert, } from 'react-native';
 
 
 import { Audio } from 'expo-av';
@@ -83,8 +83,9 @@ const App = () => {
 
   PlayBack = async () => {
     if (!uri) { // it is null
-     console.log('No Sound ',uri);
-     return;
+      Alert.alert('Sound not found', 'No record sound file')
+      console.log('No Sound ',uri);
+      return;
    }
 
     const sound = new Audio.Sound();
