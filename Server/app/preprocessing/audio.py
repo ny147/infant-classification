@@ -40,6 +40,7 @@ class AudioFeature:
         # create image_dir
         # create folder if path does not exit
         Path(f'./{self.image_dir}/type_{phase_no}').mkdir(parents=True, exist_ok=True)
+        plt.switch_backend('agg')
         
 
         

@@ -1,5 +1,6 @@
 import * as React from 'react';
-import {   SafeAreaView,StyleSheet,View,Text,Image,TouchableOpacity, } from 'react-native';
+import { useState, useRef, useEffect } from 'react';
+import {   SafeAreaView,StyleSheet,View,Text,Image,TouchableOpacity,Alert, } from 'react-native';
 
 
 import { Audio } from 'expo-av';
@@ -7,16 +8,22 @@ import * as DocumentPicker from 'expo-document-picker';
 import * as Sharing from 'expo-sharing';
 import * as MediaLibrary from 'expo-media-library';
 import * as FileSystem from 'expo-file-system';
-// import RNFS from 'react-native-fs';
 import mime from "mime";
 var uri = ""
-// var pasrsedata = ""
 const App = () => {
   let state='unknow'
   const [recording, setRecording] = React.useState();
   const [pasrsedata,setParsedata] = React.useState("unknow");
-  const [clickbutton,setClickbutton] = React.useState("Start record")
-  // const  [uri] = React.useState("");
+  const [clickbutton,setClickbutton] = React.useState("Start record");
+  const [sound, setSound] = React.useState();
+
+  //const [recording, setRecording] = useState(null);
+  const [audio, setAudio] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const recordingRef = useRef();
+
+  const [isRecording, setIsRecording] = useState(false);
+
 
   startRecording = async () => {
     try {
@@ -68,10 +75,29 @@ const App = () => {
     console.log('Stopping recording..');
     setRecording(undefined);
     await recording.stopAndUnloadAsync();
+    setRecording(null);
+    setIsRecording(false);
     uri  =  recording.getURI(); 
-    // uri = "hello"
-    // const UT = recording.getURI(); 
     console.log('Recording stopped and stored at', uri);
+  }
+
+  PlayBack = async () => {
+    if (!uri) { // it is null
+      Alert.alert('Sound not found', 'No record sound file')
+      console.log('No Sound ',uri);
+      return;
+   }
+
+    const sound = new Audio.Sound();
+    try {
+      console.log('Loading Sound ',uri);
+      await sound.loadAsync({ uri });
+      sound.playAsync();
+      setIsPlaying(true);
+      console.log('End Play');
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   Upload = async () => {
@@ -80,7 +106,7 @@ const App = () => {
     var formdata = await new FormData();
 
  
-    formdata.append('image', {
+    formdata.append('file', {
 
       uri : SoundFileUri ,
  
@@ -89,10 +115,8 @@ const App = () => {
       name: SoundFileUri.split("/").pop()
  
      });
-    console.log(formdata);
-    // `http://192.168.1.10:8080/infantcry`
-
-    await fetch(`http://34.102.29.130/infantcry`, {
+    // console.log(formdata);
+    await fetch(`http://192.168.1.1:5000/infantcry`, {
 
         method:'POST',
 
@@ -105,22 +129,18 @@ const App = () => {
     }
     ).then(response => response.text())
     .then(result => {
-      const data =  JSON.parse(result)
-      const reason = data.Reason.substring(20)
-      console.log(data)
-      // str.substring()
-      // pasrsedata = JSON.parse(result)
+      // const data =  JSON.parse(result)
+      // const reason = data.Reason.substring(20)
+      const reason = "cry";
+      console.log(result)
       setParsedata(reason)
-      // setParsedata("String")
-      // console.log(result)
-      // console.log(pasrsedata)
-      // console.log(result.Reason)
     }
     
     )
     .catch(error => console.log('error', error));
 
     }
+
 
     HandlePress = () => {
       setClickbutton(clickbutton === 'Start record' ? 'Stop record' : 'Start record');
@@ -133,27 +153,9 @@ const App = () => {
       }
     };
 
-  // return (
-  //   <View style={styles.container}>
-  //     <Button
-  //       title={recording ? 'Stop Recording' : 'Start Recording'}
-  //       onPress={recording ? stopRecording : startRecording}
-  //     />
-  //     <Text>{uri}</Text>
-  //      <Button style={styles.button} onPress={ this.Mediasave } title="Share"></Button>
-  //      {/* <Button style={styles.button} onPress={ this.upload } title="upload"></Button> */}
-  //      <Button title="upload to server" onPress={this.Upload}/>
-  //      {/* <Text>{pasrsedata.Reason}</Text> */}
-  //   </View>
-  // );
-
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
-
-        {/* <Image source={{
-          uri: 'https://png.pngtree.com/thumb_back/fh260/background/20200821/pngtree-simple-light-blue-background-image_396574.jpg',
-        }}  style={styles.decorationImage1} /> */}
 
         <Image source={{
           uri: 'https://wallpaperaccess.com/full/676550.jpg',
@@ -186,6 +188,15 @@ const App = () => {
         activeOpacity={0.8} onPress={this.Upload}  >
           <Text style={styles.buttonTextStyle2}>Predict Crying</Text>
         </TouchableOpacity>
+
+
+        <TouchableOpacity style={styles.button3} 
+        activeOpacity={0.8} onPress={this.PlayBack}  >
+          <Text style={styles.buttonTextStyle2}>Playback</Text>
+        </TouchableOpacity>
+        
+        
+     
 
       </View>
     </SafeAreaView>
@@ -253,6 +264,17 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginTop: 40,
   },
+  button3: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F72585',
+    borderWidth: 0.5,
+    borderColor: '#fff',
+    height: 64,
+    width: 220,
+    borderRadius: 20,
+    marginTop: 40,
+  },
 buttonTextStyle2: {
     color: 'white',
     marginBottom: 4,
@@ -284,4 +306,3 @@ buttonTextStyle2: {
     top: 300,  
   },
 });
-

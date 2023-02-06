@@ -27,8 +27,46 @@ def hello_world():
     return 'Hello World!'
 
 
-@app.route('/infantcry', methods=['POST', 'GET'])
-def infantcry():
+@app.route('/infantcry1', methods=['POST', 'GET'])
+def infantcry1():
+    if request.method == 'GET':
+        return {"Message": "hello infantcry testing GET Method 1"}
+
+    elif request.method == 'POST':
+
+
+        if 'file' not in request.files: 
+            print("no file part")
+            return {"Message" : "key name must be file"}
+
+        files =  request.files['file']
+        
+        if files :
+            filename = secure_filename(files.filename)
+            files.save(os.path.join(app.config["audio_upload"], filename))
+        else:
+            print("file not found")
+            return { "Message" : "file not found pls check your file and upload again"}
+
+        convert_type(filename) ## convert type to .wav
+
+        # preprocessing
+        audio = AudioFeature(sound_dir=app.config["audio_upload"], image_dir=image_dir)
+        audio.load_audio_files(filename)
+        input_audio = audio.load_audio_predict(phase_no = 2)
+
+        ## predict model
+        model = AudioModel(model_path)
+        model.load_model(["mel_model.h5"])
+        
+        output = model.predict(input_audio)
+        
+        target = output
+        return {   "audio": f'{filename}',
+                "Reason": f'baby crying because {target}'}, 201
+
+@app.route('/infantcry2', methods=['POST', 'GET'])
+def infantcry2():
     if request.method == 'GET':
         return {"Message": "hello infantcry testing GET Method"}
 
