@@ -32,6 +32,12 @@ class AudioFeature:
         self.waveform, self.sample_rate = librosa.load(file_path)
         self.audio_segment = AudioSegment.from_file(file_path)
 
+    def remove_silence(self):
+        db = 10
+        trimmed_audio = librosa.effects.trim(self.waveform, top_db=db )
+        self.waveform = trimmed_audio[0]
+
+
 
     def create_image_audio(self,typeimg,phase_no):
 
@@ -40,6 +46,7 @@ class AudioFeature:
         # create image_dir
         # create folder if path does not exit
         Path(f'./{self.image_dir}/type_{phase_no}').mkdir(parents=True, exist_ok=True)
+        plt.switch_backend('agg')
         
 
         
@@ -63,13 +70,15 @@ class AudioFeature:
             fast_fourier_transf = np.fft.fft(waveform)
             plt.plot(timescale, fast_fourier_transf,color = 'k')
         if typeimg != 'waveform':
-            librosa.display.specshow(spectrogram, sr=self.sample_rate, x_axis='time')
+            librosa.display.specshow(spectrogram, sr=self.sample_rate, x_axis='time',cmap = 'magma')
         plt.axis('off')
 
 
         # save img
         self.image_file =  f'./{self.image_dir}/type_{phase_no}/Temp.jpg'
+        static = f'./app/static/current_image.jpg'
         plt.savefig(self.image_file,bbox_inches="tight", pad_inches=0)
+        plt.savefig(static,bbox_inches="tight", pad_inches=0)
         plt.clf()
 
     def load_audio_predict(self,phase_no):
@@ -94,7 +103,8 @@ class AudioFeature:
         # image_ds = tf.keras.preprocessing.image_dataset_from_directory( f'./{self.image_dir}/{phase_no}', labels='inferred', label_mode='int', image_size=(432, 288), seed=321,validation_split=None, subset=None)
         image_ds = tf.keras.preprocessing.image_dataset_from_directory( f'./{self.image_dir}/type_{phase_no}', labels= None, label_mode= None, image_size=(432, 288), seed=321,validation_split=None, subset=None)
         
-
+        
 
         sound_predict = np.array(list(image_ds.unbatch().as_numpy_iterator()))
+        # sound_predict = np.array(tf.constant(image_ds.unbatch()).numpy())
         return sound_predict

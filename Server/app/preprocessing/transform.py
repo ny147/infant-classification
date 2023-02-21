@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 import numpy as np
 from pydub import AudioSegment
-
+from pathlib import Path
 class AudioTransform:
     def __init__(self):
         self.waveform = []
@@ -37,12 +37,14 @@ class AudioTransform:
         return waveformdb
 
     def mel_spectrogram(self):
-        n_fft = 2048
-        hop_length = 128
-        audio_stft = librosa.feature.melspectrogram(y=self.waveform, n_fft=n_fft, hop_length=hop_length)
+        
+        n_fft = 2560
+        hop_length = 32
+        # audio_stft = librosa.feature.melspectrogram(y=self.waveform, n_fft=n_fft, hop_length=hop_length)
+        audio_stft = librosa.feature.melspectrogram(y=self.waveform,n_fft=n_fft,hop_length=hop_length,fmin = 20,fmax =  self.sample_rate//2)
         log_spectro = librosa.power_to_db(audio_stft)
-        librosa.display.specshow(log_spectro, sr=self.sample_rate, x_axis='time', y_axis='fft', cmap='magma')
-
+        # librosa.display.specshow(log_spectro, sr=self.sample_rate, x_axis='time', y_axis='fft', cmap='magma')
+        
         return log_spectro
 
     def rms(self):

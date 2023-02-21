@@ -1,0 +1,11 @@
+Dockerfile
+.git/
+README.md
+*.pyc
+*.pyo
+*.pyd
+__pycache__
+.pytest_cache
+app/model/BurpAndPoop.h5
+app/model/HungryTiredAndDiscomfort.h5
+app/model/SplitClass.h5

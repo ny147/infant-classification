@@ -1,5 +1,6 @@
 import * as React from 'react';
-import {   SafeAreaView,StyleSheet,View,Text,Image,TouchableOpacity, } from 'react-native';
+import { useState, useRef, useEffect } from 'react';
+import {   SafeAreaView,StyleSheet,View,Text,Image,TouchableOpacity,Alert, } from 'react-native';
 
 
 import { Audio } from 'expo-av';
@@ -7,16 +8,59 @@ import * as DocumentPicker from 'expo-document-picker';
 import * as Sharing from 'expo-sharing';
 import * as MediaLibrary from 'expo-media-library';
 import * as FileSystem from 'expo-file-system';
-// import RNFS from 'react-native-fs';
 import mime from "mime";
 var uri = ""
-// var pasrsedata = ""
+
+const RECORDING_OPTIONS_PRESET_HIGH_QUALITY = {
+  android: {
+    extension: '.m4a',
+    outputFormat: Audio.RECORDING_OPTION_ANDROID_OUTPUT_FORMAT_MPEG_4,
+    audioEncoder: Audio.RECORDING_OPTION_ANDROID_AUDIO_ENCODER_AAC,
+    sampleRate: 44100,
+    numberOfChannels: 2,
+    bitRate: 128000,
+  },
+  ios: {
+      extension: '.m4a',
+      audioQuality: Audio.RECORDING_OPTION_IOS_AUDIO_QUALITY_MIN,
+      sampleRate: 44100,
+      numberOfChannels: 2,
+      bitRate: 128000,
+      linearPCMBitDepth: 16,
+      linearPCMIsBigEndian: false,
+      linearPCMIsFloat: false,
+  },
+};
+
+
 const App = () => {
   let state='unknow'
   const [recording, setRecording] = React.useState();
   const [pasrsedata,setParsedata] = React.useState("unknow");
-  const [clickbutton,setClickbutton] = React.useState("Start record")
-  // const  [uri] = React.useState("");
+  const [clickbutton,setClickbutton] = React.useState("Start record");
+  const [sound, setSound] = React.useState();
+  const [audio, setAudio] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  
+  const Dusound = useRef(new Audio.Recording());
+  const [IsRecording,setIsRecording] = React.useState(false);
+  const [Duration,setRecordDuration] = React.useState(0);
+
+  
+  useEffect(() => {
+    let intervalId;
+    if (IsRecording) 
+    {
+      intervalId = setInterval(async () => {
+        const { durationMillis } = await Dusound.current.getStatusAsync();
+        setRecordDuration(durationMillis / 1000);
+      }, 100);
+    }
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [IsRecording]);
 
   startRecording = async () => {
     try {
@@ -30,34 +74,15 @@ const App = () => {
       
       console.log('Starting recording..');
 
-      const RECORDING_OPTIONS_PRESET_HIGH_QUALITY = {
-        android: {
-          extension: '.m4a',
-          outputFormat: Audio.RECORDING_OPTION_ANDROID_OUTPUT_FORMAT_MPEG_4,
-          audioEncoder: Audio.RECORDING_OPTION_ANDROID_AUDIO_ENCODER_AAC,
-          sampleRate: 44100,
-          numberOfChannels: 2,
-          bitRate: 128000,
-        },
-        ios: {
-            extension: '.m4a',
-            audioQuality: Audio.RECORDING_OPTION_IOS_AUDIO_QUALITY_MIN,
-            sampleRate: 44100,
-            numberOfChannels: 2,
-            bitRate: 128000,
-            linearPCMBitDepth: 16,
-            linearPCMIsBigEndian: false,
-            linearPCMIsFloat: false,
-        },
-    };
-
-      const recording = new Audio.Recording(RECORDING_OPTIONS_PRESET_HIGH_QUALITY);
+    
       
-    
-    
+      const recording = new Audio.Recording(RECORDING_OPTIONS_PRESET_HIGH_QUALITY);
+      setIsRecording(true);
       await recording.prepareToRecordAsync(RECORDING_OPTIONS_PRESET_HIGH_QUALITY);
       await recording.startAsync(); 
+
       setRecording(recording);
+      Dusound.current = recording;
       console.log('Recording started');
     } catch (err) {
       console.error('Failed to start recording', err);
@@ -66,21 +91,42 @@ const App = () => {
 
   stopRecording = async () => {
     console.log('Stopping recording..');
-    setRecording(undefined);
+    // setRecording(undefined);
     await recording.stopAndUnloadAsync();
+    // setRecording(null);
+
+
+    setIsRecording(false);
     uri  =  recording.getURI(); 
-    // uri = "hello"
-    // const UT = recording.getURI(); 
     console.log('Recording stopped and stored at', uri);
   }
 
+  PlayBack = async () => {
+    if (!uri) { // it is null
+      Alert.alert('Sound not found', 'No record sound file')
+      console.log('No Sound ',uri);
+      return;
+   }
+
+    const sound = new Audio.Sound();
+    try {
+      console.log('Loading Sound ',uri);
+      await sound.loadAsync({ uri });
+      sound.playAsync();
+      setIsPlaying(true);
+      console.log('End Play');
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   Upload = async () => {
-    
+    // console.log("Start up")
     let SoundFileUri = await "file:/" + uri.split("file:///").join("");
     var formdata = await new FormData();
 
  
-    formdata.append('image', {
+    formdata.append('file', {
 
       uri : SoundFileUri ,
  
@@ -89,10 +135,10 @@ const App = () => {
       name: SoundFileUri.split("/").pop()
  
      });
-    console.log(formdata);
-    // `http://192.168.1.10:8080/infantcry`
-
-    await fetch(`http://34.102.29.130/infantcry`, {
+    // console.log(formdata);
+    // console.log("Start up2")
+    // https://infantcry-app-jln6p.ondigitalocean.app/infantcry
+    await fetch('http://192.168.1.6:8080/infantcry', {
 
         method:'POST',
 
@@ -106,21 +152,24 @@ const App = () => {
     ).then(response => response.text())
     .then(result => {
       const data =  JSON.parse(result)
-      const reason = data.Reason.substring(20)
+      // const reason = data.Reason.substring(20)
       console.log(data)
-      // str.substring()
-      // pasrsedata = JSON.parse(result)
-      setParsedata(reason)
-      // setParsedata("String")
-      // console.log(result)
-      // console.log(pasrsedata)
-      // console.log(result.Reason)
+      setParsedata(data.Reason)
+      new_data = {
+        "poop" : parseFloat(data.Emotion.poop).toFixed(2),
+        "discomfort" : parseFloat(data.Emotion.discomfort).toFixed(2),
+        "burping" : parseFloat(data.Emotion.burping).toFixed(2),
+        "hungry" : parseFloat(data.Emotion.hungry).toFixed(2),
+        "tired" : parseFloat(data.Emotion.tired).toFixed(2),
+      }
+      Alert.alert(JSON.stringify(new_data))
     }
     
     )
     .catch(error => console.log('error', error));
 
     }
+
 
     HandlePress = () => {
       setClickbutton(clickbutton === 'Start record' ? 'Stop record' : 'Start record');
@@ -133,27 +182,9 @@ const App = () => {
       }
     };
 
-  // return (
-  //   <View style={styles.container}>
-  //     <Button
-  //       title={recording ? 'Stop Recording' : 'Start Recording'}
-  //       onPress={recording ? stopRecording : startRecording}
-  //     />
-  //     <Text>{uri}</Text>
-  //      <Button style={styles.button} onPress={ this.Mediasave } title="Share"></Button>
-  //      {/* <Button style={styles.button} onPress={ this.upload } title="upload"></Button> */}
-  //      <Button title="upload to server" onPress={this.Upload}/>
-  //      {/* <Text>{pasrsedata.Reason}</Text> */}
-  //   </View>
-  // );
-
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
-
-        {/* <Image source={{
-          uri: 'https://png.pngtree.com/thumb_back/fh260/background/20200821/pngtree-simple-light-blue-background-image_396574.jpg',
-        }}  style={styles.decorationImage1} /> */}
 
         <Image source={{
           uri: 'https://wallpaperaccess.com/full/676550.jpg',
@@ -165,7 +196,7 @@ const App = () => {
 
 
         <Text style={styles.Topic}>
-          INFANT CRYING
+        Recorded length: {Duration}s
         </Text>
 
         <Text style={styles.Reason}>
@@ -175,6 +206,7 @@ const App = () => {
         <Text style={styles.State}>
          {pasrsedata}
         </Text>
+        
 
         <TouchableOpacity style={styles.button1} 
         activeOpacity={0.8} onPress= {HandlePress} >
@@ -186,6 +218,15 @@ const App = () => {
         activeOpacity={0.8} onPress={this.Upload}  >
           <Text style={styles.buttonTextStyle2}>Predict Crying</Text>
         </TouchableOpacity>
+
+
+        <TouchableOpacity style={styles.button3} 
+        activeOpacity={0.8} onPress={this.PlayBack}  >
+          <Text style={styles.buttonTextStyle2}>Playback</Text>
+        </TouchableOpacity>
+        
+        
+     
 
       </View>
     </SafeAreaView>
@@ -253,6 +294,17 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginTop: 40,
   },
+  button3: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F72585',
+    borderWidth: 0.5,
+    borderColor: '#fff',
+    height: 64,
+    width: 220,
+    borderRadius: 20,
+    marginTop: 40,
+  },
 buttonTextStyle2: {
     color: 'white',
     marginBottom: 4,
@@ -284,4 +336,3 @@ buttonTextStyle2: {
     top: 300,  
   },
 });
-
