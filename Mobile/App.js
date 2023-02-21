@@ -10,20 +10,57 @@ import * as MediaLibrary from 'expo-media-library';
 import * as FileSystem from 'expo-file-system';
 import mime from "mime";
 var uri = ""
+
+const RECORDING_OPTIONS_PRESET_HIGH_QUALITY = {
+  android: {
+    extension: '.m4a',
+    outputFormat: Audio.RECORDING_OPTION_ANDROID_OUTPUT_FORMAT_MPEG_4,
+    audioEncoder: Audio.RECORDING_OPTION_ANDROID_AUDIO_ENCODER_AAC,
+    sampleRate: 44100,
+    numberOfChannels: 2,
+    bitRate: 128000,
+  },
+  ios: {
+      extension: '.m4a',
+      audioQuality: Audio.RECORDING_OPTION_IOS_AUDIO_QUALITY_MIN,
+      sampleRate: 44100,
+      numberOfChannels: 2,
+      bitRate: 128000,
+      linearPCMBitDepth: 16,
+      linearPCMIsBigEndian: false,
+      linearPCMIsFloat: false,
+  },
+};
+
+
 const App = () => {
   let state='unknow'
   const [recording, setRecording] = React.useState();
   const [pasrsedata,setParsedata] = React.useState("unknow");
   const [clickbutton,setClickbutton] = React.useState("Start record");
   const [sound, setSound] = React.useState();
-
-  //const [recording, setRecording] = useState(null);
   const [audio, setAudio] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const recordingRef = useRef();
 
-  const [isRecording, setIsRecording] = useState(false);
+  
+  const Dusound = useRef(new Audio.Recording());
+  const [IsRecording,setIsRecording] = React.useState(false);
+  const [Duration,setRecordDuration] = React.useState(0);
 
+  
+  useEffect(() => {
+    let intervalId;
+    if (IsRecording) 
+    {
+      intervalId = setInterval(async () => {
+        const { durationMillis } = await Dusound.current.getStatusAsync();
+        setRecordDuration(durationMillis / 1000);
+      }, 100);
+    }
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [IsRecording]);
 
   startRecording = async () => {
     try {
@@ -37,34 +74,15 @@ const App = () => {
       
       console.log('Starting recording..');
 
-      const RECORDING_OPTIONS_PRESET_HIGH_QUALITY = {
-        android: {
-          extension: '.m4a',
-          outputFormat: Audio.RECORDING_OPTION_ANDROID_OUTPUT_FORMAT_MPEG_4,
-          audioEncoder: Audio.RECORDING_OPTION_ANDROID_AUDIO_ENCODER_AAC,
-          sampleRate: 44100,
-          numberOfChannels: 2,
-          bitRate: 128000,
-        },
-        ios: {
-            extension: '.m4a',
-            audioQuality: Audio.RECORDING_OPTION_IOS_AUDIO_QUALITY_MIN,
-            sampleRate: 44100,
-            numberOfChannels: 2,
-            bitRate: 128000,
-            linearPCMBitDepth: 16,
-            linearPCMIsBigEndian: false,
-            linearPCMIsFloat: false,
-        },
-    };
-
-      const recording = new Audio.Recording(RECORDING_OPTIONS_PRESET_HIGH_QUALITY);
+    
       
-    
-    
+      const recording = new Audio.Recording(RECORDING_OPTIONS_PRESET_HIGH_QUALITY);
+      setIsRecording(true);
       await recording.prepareToRecordAsync(RECORDING_OPTIONS_PRESET_HIGH_QUALITY);
       await recording.startAsync(); 
+
       setRecording(recording);
+      Dusound.current = recording;
       console.log('Recording started');
     } catch (err) {
       console.error('Failed to start recording', err);
@@ -73,9 +91,11 @@ const App = () => {
 
   stopRecording = async () => {
     console.log('Stopping recording..');
-    setRecording(undefined);
+    // setRecording(undefined);
     await recording.stopAndUnloadAsync();
-    setRecording(null);
+    // setRecording(null);
+
+
     setIsRecording(false);
     uri  =  recording.getURI(); 
     console.log('Recording stopped and stored at', uri);
@@ -101,7 +121,7 @@ const App = () => {
   }
 
   Upload = async () => {
-    
+    // console.log("Start up")
     let SoundFileUri = await "file:/" + uri.split("file:///").join("");
     var formdata = await new FormData();
 
@@ -116,7 +136,9 @@ const App = () => {
  
      });
     // console.log(formdata);
-    await fetch(`http://192.168.1.1:5000/infantcry`, {
+    // console.log("Start up2")
+    // https://infantcry-app-jln6p.ondigitalocean.app/infantcry
+    await fetch('http://192.168.1.6:8080/infantcry', {
 
         method:'POST',
 
@@ -129,11 +151,18 @@ const App = () => {
     }
     ).then(response => response.text())
     .then(result => {
-      // const data =  JSON.parse(result)
+      const data =  JSON.parse(result)
       // const reason = data.Reason.substring(20)
-      const reason = "cry";
-      console.log(result)
-      setParsedata(reason)
+      console.log(data)
+      setParsedata(data.Reason)
+      new_data = {
+        "poop" : parseFloat(data.Emotion.poop).toFixed(2),
+        "discomfort" : parseFloat(data.Emotion.discomfort).toFixed(2),
+        "burping" : parseFloat(data.Emotion.burping).toFixed(2),
+        "hungry" : parseFloat(data.Emotion.hungry).toFixed(2),
+        "tired" : parseFloat(data.Emotion.tired).toFixed(2),
+      }
+      Alert.alert(JSON.stringify(new_data))
     }
     
     )
@@ -167,7 +196,7 @@ const App = () => {
 
 
         <Text style={styles.Topic}>
-          INFANT CRYING
+        Recorded length: {Duration}s
         </Text>
 
         <Text style={styles.Reason}>
@@ -177,6 +206,7 @@ const App = () => {
         <Text style={styles.State}>
          {pasrsedata}
         </Text>
+        
 
         <TouchableOpacity style={styles.button1} 
         activeOpacity={0.8} onPress= {HandlePress} >
