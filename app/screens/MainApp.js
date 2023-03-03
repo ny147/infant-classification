@@ -9,34 +9,34 @@ const MainApp = () =>{
         style={styles.container}>
 
             <Image source={{
-                uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1080487153613676614/f50524ee5f161f437400aaf215c9e12f.png',
+                uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081100252003700786/white.png',
 
             }}  style={{width: 414,height: 1000,position: 'absolute',top:260,borderRadius: 65,}} />
 
 
             <Image source={{
-                uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1080494143865884802/9ef28c.png',
+                uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081100289337208963/LightGreen.png',
 
             }}  style={{width: 90,height: 90,position: 'absolute',top:220,left:160,borderRadius: 65,}} />
 
             <Image source={{
-                uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1080494658414706829/c58bf2.png',
+                uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081100284392128543/LightPurple.png',
 
             }}  style={{width: 60,height: 60,position: 'absolute',top:260,left:260,borderRadius: 65,}} />
         
 
             <Image source={{
-                uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1080487153613676614/f50524ee5f161f437400aaf215c9e12f.png',
+                uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081100252003700786/white.png',
             
             }}  style={{width: 350,height: 100,position: 'absolute',top:70,left:30,borderRadius: 20,}} />
 
             <Image source={{
-                uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1080487492735737926/92a3fd.png',
+                uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081100266788630579/Blue.png',
             
             }}  style={{width: 350,height: 100,position: 'absolute',top:320,left:30,borderRadius: 20,}} />
 
             <Image source={{
-                uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1080487671400509501/9dceff.png',
+                uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081100274229330022/LightBlue.png',
             
             }}  style={{width: 350,height: 100,position: 'absolute',top:450,left:30,borderRadius: 20,}} />
 
