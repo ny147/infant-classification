@@ -38,7 +38,7 @@ def remove_allfile(path):
 def remove_silence_librosa(filename):
     
     waveform, sr = librosa.load(os.path.join(app.config["audio_upload"],  filename) )
-    db = 25 # adjust db
+    db = 50# adjust db
 
     # Trim silence from beginning and end of audio signal
     trimmed_audio = librosa.effects.trim(waveform, top_db=db )
@@ -136,12 +136,13 @@ def infantcry(silenttype,modeltype):
         model.load_model(f'{model_name}.h5')
         target,percent = model.predict(input_audio,model_name)
         
-        sort_percent = sorted(percent.items(), key=lambda x: x[1], reverse=True)
-        dict_sort_percent = dict(sort_percent)
+        # sort
+        # sort_percent = sorted(percent.items(), key=lambda x: x[1], reverse=True)
+        # dict_sort_percent = dict(sort_percent)
         
         return {   "Audio": f'{filename}',
                     "Reason": f'{target}',
-                    "Emotion" : dict_sort_percent}, 201
+                    "Emotion" : percent}, 201
 
 
 # @app.route('/infantcry2', methods=['POST', 'GET'])
