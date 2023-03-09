@@ -5,6 +5,12 @@ import { LinearGradient } from 'expo-linear-gradient';
 //hard code in context cuz lazy to declare all style
 const Home = ({ navigation }) =>{
 
+  Dummy = async () => {
+    console.log('Hi hi...');
+    navigation.navigate('Infantcry');
+    console.log('Hi hi2...');
+}
+
     return (
         <LinearGradient
         colors={['#9DCEFF', '#92A3FD']}
@@ -19,7 +25,7 @@ const Home = ({ navigation }) =>{
             </Text>
 
             <TouchableOpacity style={styles.button} 
-            activeOpacity={0.8} onPress={() => navigation.navigate('Infantcry')}  >
+            activeOpacity={0.8} onPress={this.Dummy }  >
                 <Text style={styles.buttonTextStyle}>Get Start</Text>
             </TouchableOpacity>
         
