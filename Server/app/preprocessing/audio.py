@@ -3,7 +3,10 @@ import librosa, librosa.display
 import matplotlib.pyplot as plt
 import tensorflow as tf
 import numpy as np
+import pywt
+import soundfile as sf
 from pydub import AudioSegment
+from pydub.silence import split_on_silence
 from pathlib import Path
 from app.preprocessing.transform  import AudioTransform
 
@@ -32,12 +35,38 @@ class AudioFeature:
         self.waveform, self.sample_rate = librosa.load(file_path)
         self.audio_segment = AudioSegment.from_file(file_path)
 
-    def remove_silence(self):
-        db = 10
+    def remove_silence_librosa(self):
+    
+        db = 50# adjust db
         trimmed_audio = librosa.effects.trim(self.waveform, top_db=db )
-        self.waveform = trimmed_audio[0]
+        self.waveform  =  trimmed_audio[0]
 
+        
 
+    def remove_silence_pydub(self):
+        # save denoise sound
+        sf.write((f'{self.sound_dir}/{self.audio_filename}'), self.waveform, self.sample_rate)
+        sound=AudioSegment.from_file(  (f'{self.sound_dir}/{self.audio_filename}'),format="wav")
+        audio_chunks=split_on_silence(sound,min_silence_len=200,silence_thresh=-45,keep_silence=50,seek_step=2)
+
+        combined = AudioSegment.empty()
+        for chunk in audio_chunks:
+            combined += chunk
+
+        self.waveform = np.array(combined.get_array_of_samples()).astype(np.float32)
+        
+    def wavelet_denoise(self):
+        w = pywt.Wavelet('sym4')
+        maxlev = pywt.dwt_max_level(len(self.waveform), w.dec_len)
+        
+        threshold = 0.04 # Threshold for filtering
+
+        # Decompose into wavelet components, to the level selected:
+        coeffs = pywt.wavedec(self.waveform, 'sym4', level=maxlev)
+        for i in range(1, len(coeffs)):
+            coeffs[i] = pywt.threshold(coeffs[i], threshold*max(coeffs[i]))
+           
+        self.waveform = pywt.waverec(coeffs, 'sym4')
 
     def create_image_audio(self,typeimg,phase_no):
 

@@ -41,7 +41,7 @@ class AudioTransform:
         n_fft = 2560
         hop_length = 32
         # audio_stft = librosa.feature.melspectrogram(y=self.waveform, n_fft=n_fft, hop_length=hop_length)
-        audio_stft = librosa.feature.melspectrogram(y=self.waveform,n_fft=n_fft,hop_length=hop_length,fmin = 20,fmax =  self.sample_rate//2)
+        audio_stft = librosa.feature.melspectrogram(y=self.waveform,n_fft=n_fft,hop_length=hop_length,fmin = 20,fmax =  self.sample_rate//2,n_mels = 128)
         log_spectro = librosa.power_to_db(audio_stft)
         # librosa.display.specshow(log_spectro, sr=self.sample_rate, x_axis='time', y_axis='fft', cmap='magma')
         
