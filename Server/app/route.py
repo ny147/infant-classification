@@ -9,13 +9,16 @@ from pathlib import Path
 import os
 import soundfile as sf
 import librosa
+import pywt
 
 model_path = 'app/model/infant_model/'
 image_dir = 'app/data/image'
 app.config["audio_upload"] = "app/data/sound/"
 app.config['JSON_SORT_KEYS'] = False
 
-
+def remove_allfile(path):
+    [f.unlink() for f in Path(path).glob("*") if f.is_file()] 
+    
 def convert_type(name):
     try:
         filename, file_extension = os.path.splitext(name)
@@ -31,37 +34,43 @@ def convert_type(name):
         return {"Message" : "Request failed file type must be .m4a mp4 .mp3"}
     return f'{filename}{file_extension}'
 
+# def wavelet_denoise(waveform):
+#         w = pywt.Wavelet('sym4')
+#         maxlev = pywt.dwt_max_level(len(waveform), w.dec_len)
 
-def remove_allfile(path):
-    [f.unlink() for f in Path(path).glob("*") if f.is_file()] 
+#         threshold = 0.04 # Threshold for filtering
 
-def remove_silence_librosa(filename):
+#         # Decompose into wavelet components, to the level selected:
+#         coeffs = pywt.wavedec(waveform, 'sym4', level=maxlev)
+#         waveform = pywt.waverec(coeffs, 'sym4')
+#         return waveform
+
+# def remove_silence_librosa(filename):
     
-    waveform, sr = librosa.load(os.path.join(app.config["audio_upload"],  filename) )
-    db = 50# adjust db
+#     waveform, sr = librosa.load(os.path.join(app.config["audio_upload"],  filename) )
+#     db = 50# adjust db
 
-    # Trim silence from beginning and end of audio signal
-    trimmed_audio = librosa.effects.trim(waveform, top_db=db )
+#     # Trim silence from beginning and end of audio signal
+#     trimmed_audio = librosa.effects.trim(waveform, top_db=db )
+#     data = wavelet_denoise(trimmed_audio[0])
 
-    filename_output = f'trim_{db}db_{filename}'
-    sf.write(os.path.join(app.config["audio_upload"],  filename_output) , trimmed_audio[0], sr)
+#     filename_output = f'trim_{db}db_{filename}'
+#     sf.write(os.path.join(app.config["audio_upload"],  filename_output) , data, sr)
+#     return filename_output
 
+# def remove_silence_pydub(filename):
 
-    return filename_output
+#     sound=AudioSegment.from_file(os.path.join(app.config["audio_upload"],  filename),format="wav")
+#     audio_chunks=split_on_silence(sound,min_silence_len=200,silence_thresh=-45,keep_silence=50,seek_step=2)
 
-def remove_silence_pydub(filename):
+#     combined = AudioSegment.empty()
+#     for chunk in audio_chunks:
+#         combined += chunk
 
-    sound=AudioSegment.from_file(os.path.join(app.config["audio_upload"],  filename),format="wav")
-    audio_chunks=split_on_silence(sound,min_silence_len=200,silence_thresh=-45,keep_silence=50,seek_step=2)
+#     filename_output = f'trim_{filename}'
+#     combined.export(os.path.join(app.config["audio_upload"],  filename_output), format = "wav")
 
-    combined = AudioSegment.empty()
-    for chunk in audio_chunks:
-        combined += chunk
-
-    filename_output = f'trim_{filename}'
-    combined.export(os.path.join(app.config["audio_upload"],  filename_output), format = "wav")
-
-    return filename_output
+#     return filename_output
     
 
 
@@ -102,27 +111,29 @@ def infantcry(silenttype,modeltype):
             return { "Message" : "file not found pls check your file and upload again"}
 
         filename = convert_type(filename) ## convert type to .wav
-
-
+        
+        audio = AudioFeature(sound_dir=app.config["audio_upload"], image_dir=image_dir)
 
         # preprocessing
-        if silenttype == 0:
-            file_remove_silence = filename
-        elif silenttype == 1:
-            file_remove_silence = remove_silence_pydub(filename)
-        elif silenttype == 2:
-            file_remove_silence = remove_silence_librosa(filename)
-        else :
-            file_remove_silence = filename
+        audio.load_audio_files(filename)
 
-        audio = AudioFeature(sound_dir=app.config["audio_upload"], image_dir=image_dir)
-        audio.load_audio_files(file_remove_silence)
+        # denoise
+        audio.wavelet_denoise()
+
+        # select trim type
+        if silenttype == 1:
+            audio.remove_silence_pydub()
+        elif silenttype == 2:
+            audio.remove_silence_librosa()
+        else :
+            print("skip trim")
         input_audio = audio.load_audio_predict(phase_no = 2)    
+        
 
         ## remove file  
-        # remove_allfile(app.config["audio_upload"])
+        remove_allfile(app.config["audio_upload"])
 
-        ## predict model
+        # predict model
         model = AudioModel(model_path)
 
         # 2 mdodel
@@ -132,7 +143,8 @@ def infantcry(silenttype,modeltype):
             model_name = "mel_model_trim"
         else :
             model_name = "mel_model"
-            
+        
+
         model.load_model(f'{model_name}.h5')
         target,percent = model.predict(input_audio,model_name)
         
