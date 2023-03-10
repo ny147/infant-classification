@@ -37,27 +37,16 @@ class AudioFeature:
 
     def remove_silence_librosa(self):
     
-        # waveform, sr = librosa.load(f'{self.sound_dir}/{self.audio_filename}')
         db = 50# adjust db
-
-        # Trim silence from beginning and end of audio signal
         trimmed_audio = librosa.effects.trim(self.waveform, top_db=db )
-        # data = wavelet_denoise(trimmed_audio[0])
-        
-        # filename_output = f'trim_{db}db_{self.audio_filename}'
-        # sf.write(f'{self.sound_dir}/{filename_output}' , trimmed_audio[0], sr)
         self.waveform  =  trimmed_audio[0]
 
         
 
     def remove_silence_pydub(self):
-        
+        # save denoise sound
         sf.write((f'{self.sound_dir}/{self.audio_filename}'), self.waveform, self.sample_rate)
-    
-
         sound=AudioSegment.from_file(  (f'{self.sound_dir}/{self.audio_filename}'),format="wav")
-        # y = np.array(self.sample_rate * (1<<15), dtype=np.int16)
-        # sound = AudioSegment(y.tobytes(),frame_rate=self.sample_rate,sample_width=y.dtype.itemsize,channels=1)
         audio_chunks=split_on_silence(sound,min_silence_len=200,silence_thresh=-45,keep_silence=50,seek_step=2)
 
         combined = AudioSegment.empty()
@@ -65,12 +54,7 @@ class AudioFeature:
             combined += chunk
 
         self.waveform = np.array(combined.get_array_of_samples()).astype(np.float32)
-
-        # filename_output = f'trim_{self.audio_filename}'
-        # combined.export(f'{self.sound_dir}/{filename_output}', format = "wav")
-        # waveform, sr = librosa.load(f'{self.sound_dir}/{filename_output}')
-        # self.waveform = waveform
-
+        
     def wavelet_denoise(self):
         w = pywt.Wavelet('sym4')
         maxlev = pywt.dwt_max_level(len(self.waveform), w.dec_len)
