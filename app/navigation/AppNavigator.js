@@ -31,14 +31,6 @@ const AppNavigator = () => {
                 },headerShown : false
             }}
         />
-        <Tab.Screen name = 'Info' 
-                    component={Info}
-                    options={{
-                        tabBarIcon : ({color,size}) =>{
-                    return <Ionicons name="analytics" size={size} color= {color} />
-                },headerShown : false
-            }}
-        />
         <Tab.Screen name = 'Result' 
                     component={Result}
                     options={{
@@ -47,6 +39,15 @@ const AppNavigator = () => {
                 },headerShown : false
             }}
         />
+        <Tab.Screen name = 'Info' 
+                    component={Info}
+                    options={{
+                        tabBarIcon : ({color,size}) =>{
+                    return <Ionicons name="analytics" size={size} color= {color} />
+                },headerShown : false
+            }}
+        />
+        
       </Tab.Navigator>
     );
 };

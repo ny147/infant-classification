@@ -4,6 +4,14 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 const Result = ({ navigation }) =>{
 
+  const [showImages, setShowImages] = React.useState(false);
+
+  const handleButtonPress = () => {
+    setShowImages(true);
+    console.log('Show image');
+  };
+
+
     Dummy = async () => {
       console.log('Hi hi...');
   }
@@ -12,6 +20,18 @@ const Result = ({ navigation }) =>{
           <LinearGradient
           colors={['#9DCEFF', '#92A3FD']}
           style={styles.container}>
+
+        {showImages && (
+        <Image
+          source={{ uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081100299252531232/Pink.png' }}
+          style={styles.overImage}
+        />
+      )}
+        <Image
+          source={{ uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081100252003700786/white.png' }}
+          style={styles.underImage}
+        />
+      
   
               <Text style={styles.Topic}>
                   InfantCry
@@ -21,11 +41,10 @@ const Result = ({ navigation }) =>{
                   Result
               </Text>
 
-              <Image source={{uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1083368418310373376/BarDummy.jpg'}}  
-                style={styles.graph}  />
+
 
               <TouchableOpacity style={styles.button} 
-              activeOpacity={0.8} onPress={this.Dummy }  >
+              activeOpacity={0.8} onPress={handleButtonPress}  >
                   <Text style={styles.buttonTextStyle}>ButtonName</Text>
               </TouchableOpacity>
           
@@ -56,6 +75,23 @@ const Result = ({ navigation }) =>{
           top: 120,
           left:150,  
         },
+        overImage: {
+          position: 'absolute',
+          zIndex: 1,
+          width: 200,
+          height: 200,
+          top:180,
+          left:50,
+          position: 'absolute',
+        },
+        underImage: {
+          zIndex: 0,
+          width: 300,
+          height: 300,
+          top:180,
+          left:50,
+          position: 'absolute',
+        },
       button: {
           flexDirection: 'row',
           alignItems: 'center',
@@ -79,9 +115,9 @@ const Result = ({ navigation }) =>{
         graph:{
             width: 300,
             height: 300,
-            position: 'absolute',
             top:180,
             left:50,
+            position: 'absolute',
         }
   
     });
