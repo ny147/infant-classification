@@ -9,7 +9,7 @@ const Home = ({ navigation }) =>{
     console.log('Hi hi...');
     navigation.navigate('Infantcry');
     console.log('Hi hi2...');
-}
+  }
 
     return (
         <LinearGradient

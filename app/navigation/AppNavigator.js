@@ -31,14 +31,6 @@ const AppNavigator = () => {
                 },headerShown : false
             }}
         />
-        <Tab.Screen name = 'Result' 
-                    component={Result}
-                    options={{
-                        tabBarIcon : ({color,size}) =>{
-                    return <Foundation name="results" size={size} color= {color} />
-                },headerShown : false
-            }}
-        />
         <Tab.Screen name = 'Info' 
                     component={Info}
                     options={{

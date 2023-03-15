@@ -1,6 +1,8 @@
 import React from 'react';
 import {View, Text,StyleSheet,Image,TouchableOpacity} from  'react-native'
 import { LinearGradient } from 'expo-linear-gradient';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
 
 const Result = ({ navigation }) =>{
 
@@ -12,14 +14,31 @@ const Result = ({ navigation }) =>{
   };
 
 
-    Dummy = async () => {
-      console.log('Hi hi...');
+  Dummy = async () => {
+    console.log('Hi hi...');
   }
+
+
+  GotoMainApp = async () => {
+    console.log('To MainApp');
+    navigation.navigate('Infantcry');
+  }
+
   
       return (
           <LinearGradient
           colors={['#9DCEFF', '#92A3FD']}
           style={styles.container}>
+        
+        <Image
+          source={{ uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081100252003700786/white.png' }}
+          style={{width: 50,height: 50,position: 'absolute',top:42,left:20,borderRadius: 10,}}
+        /> 
+
+        <TouchableOpacity onPress={this.GotoMainApp} style={{position: 'absolute',top:42,left:20}}>
+          <Icon name="arrow-left-bold" size={50} color="black" />
+        </TouchableOpacity>
+          
 
         {showImages && (
         <Image
