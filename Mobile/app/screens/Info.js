@@ -21,7 +21,7 @@ const Info = () =>{
             goals
             </Text>
 
-            <Image source={{uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081099578490753024/Pink.png'}}  
+            <Image source={{uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081100299252531232/Pink.png'}}  
             style={{width: 60,height: 60,position: 'absolute',top:295,left:10,borderRadius: 65,}} />
             <Text style={{top:308,left:20,color: 'white',fontSize:18,fontWeight: 'bold',position: 'absolute'}}>
                 Neh
@@ -39,7 +39,7 @@ const Info = () =>{
             </Text>
 
 
-            <Image source={{uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081099578490753024/Pink.png'}}  
+            <Image source={{uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081100299252531232/Pink.png'}}  
             style={{width: 60,height: 60,position: 'absolute',top:360,left:10,borderRadius: 65,}} />
             <Text style={{top:375,left:20,color: 'white',fontSize:18,fontWeight: 'bold',position: 'absolute'}}>
                 Earih
@@ -60,7 +60,7 @@ const Info = () =>{
             </Text>
 
 
-            <Image source={{uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081099578490753024/Pink.png'}}  
+            <Image source={{uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081100299252531232/Pink.png'}}  
             style={{width: 60,height: 60,position: 'absolute',top:430,left:10,borderRadius: 65,}} />
             <Text style={{top:445,left:20,color: 'white',fontSize:18,fontWeight: 'bold',position: 'absolute'}}>
                 Owh
@@ -78,7 +78,7 @@ const Info = () =>{
             </Text>
 
 
-            <Image source={{uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081099578490753024/Pink.png'}}  
+            <Image source={{uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081100299252531232/Pink.png'}}  
             style={{width: 60,height: 60,position: 'absolute',top:495,left:10,borderRadius: 65,}} />
             <Text style={{top:510,left:20,color: 'white',fontSize:18,fontWeight: 'bold',position: 'absolute'}}>
                 Heh
@@ -96,7 +96,7 @@ const Info = () =>{
             </Text>
 
 
-            <Image source={{uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081099578490753024/Pink.png'}}  
+            <Image source={{uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081100299252531232/Pink.png'}}  
             style={{width: 60,height: 60,position: 'absolute',top:560,left:10,borderRadius: 65,}} />
             <Text style={{top:575,left:28,color: 'white',fontSize:18,fontWeight: 'bold',position: 'absolute'}}>
                 Eh

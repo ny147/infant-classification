@@ -5,6 +5,7 @@ import * as scale from 'd3-scale'
 
 class Graph extends React.PureComponent {
     
+    
     render() {
         // const {data} = this.props
         const data = [
@@ -57,4 +58,6 @@ class Graph extends React.PureComponent {
         )
     }
 }
+
+
 export default Graph
