@@ -7,11 +7,14 @@ const MainApp = () =>{
     const [iconName, setIconName] = React.useState('microphone');
     const [backgroundImage, setBackgroundImage] = React.useState({ uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081100289337208963/LightGreen.png' });
     const [isHomeImage, setIsHomeImage] = React.useState(false);
-    const [showImages, setShowImages] = React.useState(false);
+    const [showLoadImages, setShowLoadImages] = React.useState(false);
+    const [showGraph, setShowGraph] = React.useState(false);
 
-    Showgraph = async () => {
-      setShowImages(true);
+    ShowLoadImage = async () => {
+      setShowLoadImages(true);
       console.log('Show image');
+      setShowGraph(true);
+      console.log('Show Graph');
     };
 
     Dummy = async () => {
@@ -121,16 +124,23 @@ const MainApp = () =>{
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.button3} 
-            activeOpacity={0.8} onPress={this.Showgraph}  >
+            activeOpacity={0.8} onPress={this.ShowLoadImage}  >
                 <Text style={styles.buttonTextStyle3}>O Analyse emotion</Text>
             </TouchableOpacity>
             
-            {showImages && (
+            {showLoadImages && (
             <Image
               source={{ uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081100299252531232/Pink.png' }}
-              style={styles.GraphImage}
+              style={styles.LoadImage}
             />
           )}
+
+            {showGraph && (
+            <Image
+              source={{ uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081100252003700786/white.png' }}
+              style={styles.GraphImage}
+            />
+          )}  
 
            
 
@@ -233,14 +243,21 @@ const styles = StyleSheet.create({
         marginLeft: 265,
         overflow: 'hidden',
       },
-      GraphImage: {
+      LoadImage: {
         position: 'absolute',
         zIndex: 1,
         width: 500,
         height: 250,
         top:300,
         left:0,
+      },
+      GraphImage: {
         position: 'absolute',
+        zIndex: 1,
+        width: 300,
+        height: 200,
+        top:310,
+        left:10,
       },
 })
 
