@@ -7,33 +7,35 @@ class Graph extends React.PureComponent {
     
     
     render() {
-        // const {data} = this.props
-        const data = [
-            {
-                value: 50,
-                label: 'One',
-            },
-            {
-                value: 10,
-                label: 'Two',
-            },
-            {
-                value: 40,
-                label: 'Three',
-            },
-            {
-                value: 95,
-                label: 'Four',
-            },
-            {
-                value: 85,
-                label: 'Five',
-            },
-        ]
-
+        const DA = this.props.data;
+        const data = DA
+        // const data = [
+        //     {
+        //         value: 50,
+        //         label: 'One',
+        //     },
+        //     {
+        //         value: 10,
+        //         label: 'Two',
+        //     },
+        //     {
+        //         value: 40,
+        //         label: 'Three',
+        //     },
+        //     {
+        //         value: 95,
+        //         label: 'Four',
+        //     },
+        //     {
+        //         value: 85,
+        //         label: 'Five',
+        //     },
+        // ]
+        //     console.log('graph',DA);
+            // console.log(data)
 
         return (
-            <View style={{flexDirection: 'row', height: 200, paddingVertical: 16 ,top : 350 , marginLeft : 10,marginRight : 20}}>
+            <View style={{flexDirection: 'row', height: 200, paddingVertical: 16 ,top : 30 , marginLeft : 10,marginRight : 20}}>
                 <YAxis
                     data={data}
                     yAccessor={({ index }) => index}

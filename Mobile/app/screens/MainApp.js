@@ -2,14 +2,24 @@
 
 import * as React from 'react';
 import { useState, useRef, useEffect } from 'react';
-import {View, Text,StyleSheet,SafeAreaView,Image,TouchableOpacity,ImageBackground} from  'react-native'
+import {ActivityIndicator,View, Text,StyleSheet,SafeAreaView,Image,TouchableOpacity,ImageBackground} from  'react-native'
 import { LinearGradient } from 'expo-linear-gradient';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Audio } from 'expo-av';
 import mime from "mime";
 import Graph from '../component/Graph';
-
-
+import * as DocumentPicker from 'expo-document-picker';
+import * as FileSystem from 'expo-file-system';
+const initdata = [
+  {
+      value: 0,
+      label: 'poop',
+  },
+  {
+      value: 0,
+      label: 'discomfort',
+  }
+]
 
 
 
@@ -21,9 +31,15 @@ const MainApp = () =>{
     const [recording, setRecording] = React.useState();
     const [Duration,setDuration] = React.useState(0);
     const [showGraph,setshowGraph] = React.useState(false)
-    const [data,setdata] = React.useState(null)
+    const [Tdata,setTdata] = React.useState(initdata)
     const [uri,seturi] = React.useState("");
+    const [Reason,setReason] = React.useState("") 
+    const [Loading,setLoading] = React.useState(false);
     const DurationSound = useRef(new Audio.Recording());
+
+    const [wavfile,setwavfile] = React.useState();
+   
+    
     Dummy = async () => {
         console.log('Hi hi...');
     }
@@ -66,6 +82,20 @@ const MainApp = () =>{
       };
     }, [IsRecording]);
 
+    selectDocuments = async () => {
+      try {
+      const result = await DocumentPicker.getDocumentAsync({type: '*/*'});
+      console.log('result',result);
+ 
+        if (!result.cancelled) {
+          seturi(result.uri)
+     
+        }
+
+      } catch (error) {
+        console.log("Error cannot read file", error);
+      }
+      };
 
       startRecording = async () => {
         try {
@@ -124,16 +154,24 @@ const MainApp = () =>{
       }
     
       Upload = async () => {
-        // console.log("Start up")
+
+        // const result = await DocumentPicker.getDocumentAsync({type: '*/*'});
+        // // console.log('result',result);
+        // console.log('origin',typeof result.uri);
+        // console.log('check',result.uri)
+      
+        
+
         let SoundFileUri = "file:/" + uri.split("file:///").join("");
         var formdata =  new FormData();
-    
-     
+        console.log('sounduri = ',SoundFileUri)
+        
         formdata.append('file', {
     
           uri : SoundFileUri ,
      
-          type: mime.getType(SoundFileUri ),
+          type: mime.getType(SoundFileUri),
+          // type : result.mimeType,
      
           name: SoundFileUri.split("/").pop()
      
@@ -141,7 +179,9 @@ const MainApp = () =>{
         // console.log(formdata);
         // console.log("Start up2")
         // https://infantcry-app-jln6p.ondigitalocean.app/infantcry
-        await fetch('http://192.168.1.4:8080/infantcry/0/2',{
+        // setLoading(true);
+        // setshowGraph(true)
+        await fetch('http://192.168.1.6:8080/infantcry/0/2',{
     
             method:'POST',
     
@@ -158,49 +198,43 @@ const MainApp = () =>{
           
           const data =  JSON.parse(result)
           const reason = data.Reason.substring(20)
-
-          console.log(data)
-          // setParsedata(data.Reason)
-
-
-          // new_data = {
-          //   "poop" : parseFloat(data.Emotion.poop).toFixed(2),
-          //   "discomfort" : parseFloat(data.Emotion.discomfort).toFixed(2),
-          //   "burping" : parseFloat(data.Emotion.burping).toFixed(2),
-          //   "hungry" : parseFloat(data.Emotion.hungry).toFixed(2),
-          //   "tired" : parseFloat(data.Emotion.tired).toFixed(2),
-          // }
-
-          const newdata = [
+          
+          newstate = [
             {
-                value: parseFloat(data.Emotion.poop).toFixed(2),
+                value: parseInt(data.Emotion.poop),
                 label: 'poop',
             },
             {
-                value: parseFloat(data.Emotion.discomfort).toFixed(2),
+                value: parseInt(data.Emotion.discomfort),
                 label: 'discomfort',
             },
             {
-                value: parseFloat(data.Emotion.burping).toFixed(2),
+                value: parseInt(data.Emotion.burping),
                 label: 'burping',
             },
             {
-                value: parseFloat(data.Emotion.hungry).toFixed(2),
+                value: parseInt(data.Emotion.hungry),
                 label: 'hungry',
             },
             {
-                value: parseFloat(data.Emotion.tired).toFixed(2),
+                value: parseInt(data.Emotion.tired),
                 label: 'tired',
             },
         ]
-          // Alert.alert(JSON.stringify(new_data))
+
+
           setshowGraph(true)
-          setdata(newdata)
+          
+          setReason(data.Reason)
+          setTdata([...newstate])
+          console.log(newstate)
+          console.log(Reason)
           
         }
         
         )
         .catch(error => console.log('error', error));
+        // setLoading(true);
     
         }
 
@@ -246,16 +280,23 @@ const MainApp = () =>{
             
             }}  style={{width: 350,height: 100,position: 'absolute',top:110,left:30,borderRadius: 20,}} />
 
-            <Image source={{
+
+
+            {!showGraph && (
+              <Image source={{
                 // uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1082652875135647845/Dustan_labguage_1.png',
                 uri : 'https://user-images.githubusercontent.com/60291649/224925305-407df73b-4520-409a-9f94-077dee674168.png'
             
             }}  style={{width: 380,height: 100,position: 'absolute',top:335,left:10,}} />
+              )}
 
-            <Image source={{
+          {!showGraph && (
+              <Image source={{
                 uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1082652961261498418/about_us.png',
             
             }}  style={{width: 350,height: 100,position: 'absolute',top:440,left:30,borderRadius: 20,}} />
+                )}
+            
 
             <Text style={styles.Topic}>
             Recorded length: {Duration}s
@@ -276,12 +317,15 @@ const MainApp = () =>{
             </Text>
             
 
-            <Text style={{top:380,left:60,color: 'black',fontSize:16,}}>
-            Who are we ? get know
-            </Text>
-            <Text style={{top:380,left:110,color: '#92A3FD' ,fontSize:16,}}>
+           {!showGraph && (
+             <Text style={{top:380,left:60,color: 'black',fontSize:16,}}>
+             Who are we ? get know
+             </Text>
+           )}
+
+            {/* <Text style={{top:380,left:110,color: '#92A3FD' ,fontSize:16,}}>
             about us   
-            </Text>
+            </Text> */}
             
             <TouchableOpacity onPress={handlePress} style={styles.buttonMicrophone}>
                 <ImageBackground source={backgroundImage} style={styles.image}>
@@ -289,7 +333,7 @@ const MainApp = () =>{
                 </ImageBackground>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={this.Dummy} style={styles.buttonFolder}>
+            <TouchableOpacity onPress={this.selectDocuments} style={styles.buttonFolder}>
                 <Icon name="folder-multiple" size={30} color="black" />
             </TouchableOpacity>
 
@@ -321,12 +365,20 @@ const MainApp = () =>{
             </TouchableOpacity>
             
             {showGraph && (
-            // <Image
-            //   source={{ uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081100299252531232/Pink.png' }}
-            //   style={styles.GraphImage}
-            // />
-            <Graph data = {data}/>
+         
+            <Graph data = {Tdata}/>
+            // <Text style={{top:350,left:110,color: 'black',fontSize:16,}}>
+            // this is {Tdata}
+            // </Text>
+         
           )}
+
+            {/* {Loading && (
+              <View style={{justifyContent: 'center'}}>
+                <ActivityIndicator size="large" color="#00ff00" style={{marginTop:50}}/>
+              </View>
+                
+            )} */}
 
         </LinearGradient>
     )
