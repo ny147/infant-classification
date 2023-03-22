@@ -79,6 +79,7 @@
 import React from 'react';
 import {View, Text,StyleSheet,Image,TouchableOpacity} from  'react-native'
 import { LinearGradient } from 'expo-linear-gradient';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
 //hard code in context cuz lazy to declare all style
 const Home = ({ navigation }) =>{
@@ -112,6 +113,7 @@ const Home = ({ navigation }) =>{
 }
 
 
+
 const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -121,40 +123,43 @@ const styles = StyleSheet.create({
         fontSize : 34,
         fontWeight: 'bold',
         position: 'absolute',
-        margin:10,
+        margin:20,
         top: 280,
-        left:150,  
+        marginLeft:"40%" 
       },
       Topic2: {
         color: 'white',
         fontSize : 34,
         fontWeight: 'bold',
         position: 'absolute',
-        margin:10,
+        margin:20,
         top: 320,
-        left:150,  
+        // left:"40%",  
+        marginLeft:"40%"
       },
     button: {
         flexDirection: 'row',
         alignItems: 'center',
+
         backgroundColor: '#FFFFFF',
         borderWidth: 0.5,
         borderColor: '#fff',
         height: 64,
-        width: 300,
+        width: "72%",
         borderRadius: 20,
-        marginTop: 450,
-        marginLeft: 60
+        marginTop: 420,
+        marginLeft: "15%"
       },
     buttonTextStyle: {
         color: '#92A3FD',
-        marginBottom: 4,
-        marginLeft: 95,
+        margin: "2%",
+        marginLeft: "30%",
         justifyContent: 'center',
         fontSize:28,
         fontWeight: 'bold'
       },
 
   });
+
 
 export default Home;

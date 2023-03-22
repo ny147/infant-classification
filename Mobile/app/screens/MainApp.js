@@ -5,11 +5,14 @@ import { useState, useRef, useEffect } from 'react';
 import {ActivityIndicator,View, Text,StyleSheet,SafeAreaView,Image,TouchableOpacity,ImageBackground} from  'react-native'
 import { LinearGradient } from 'expo-linear-gradient';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { AntDesign } from '@expo/vector-icons'; 
 import { Audio } from 'expo-av';
 import mime from "mime";
 import Graph from '../component/Graph';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
+
+
 const initdata = [
   {
       value: 0,
@@ -26,6 +29,7 @@ const initdata = [
 const MainApp = () =>{
     const [iconName, setIconName] = React.useState('microphone');
     const [backgroundImage, setBackgroundImage] = React.useState({ uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081100289337208963/LightGreen.png' });
+    const [BGcolor,setBGcolor] = React.useState("#90ee90")
     const [isHomeImage, setIsHomeImage] = React.useState(false);
     const [IsRecording,setIsRecording] = React.useState(false);
     const [recording, setRecording] = React.useState();
@@ -38,6 +42,11 @@ const MainApp = () =>{
     const DurationSound = useRef(new Audio.Recording());
 
     const [wavfile,setwavfile] = React.useState();
+
+    const colorStylees ={
+      backgroundColor:BGcolor,
+    }
+   
    
     
     Dummy = async () => {
@@ -46,6 +55,7 @@ const MainApp = () =>{
     Dummy2 = async () => {
         console.log('Hi hi2...');
     }
+    
     const RECORDING_OPTIONS_PRESET_HIGH_QUALITY = {
       android: {
         extension: '.m4a',
@@ -81,7 +91,7 @@ const MainApp = () =>{
         clearInterval(intervalId);
       };
     }, [IsRecording]);
-
+    
     selectDocuments = async () => {
       try {
       const result = await DocumentPicker.getDocumentAsync({type: '*/*'});
@@ -176,12 +186,10 @@ const MainApp = () =>{
           name: SoundFileUri.split("/").pop()
      
          });
-        // console.log(formdata);
-        // console.log("Start up2")
-        // https://infantcry-app-jln6p.ondigitalocean.app/infantcry
-        // setLoading(true);
-        // setshowGraph(true)
-        await fetch('http://192.168.1.6:8080/infantcry/0/2',{
+      
+        setLoading(true);
+        setshowGraph(false);
+        await fetch('http://192.168.1.7:8080/infantcry/0/2',{
     
             method:'POST',
     
@@ -198,6 +206,8 @@ const MainApp = () =>{
           
           const data =  JSON.parse(result)
           const reason = data.Reason.substring(20)
+
+        
           
           newstate = [
             {
@@ -233,16 +243,18 @@ const MainApp = () =>{
         }
         
         )
-        .catch(error => console.log('error', error));
-        // setLoading(true);
-    
+        .catch((error) => console.log('error', error));
+        setLoading(false);
+        console.log("hello world")
         }
 
-     
+      
 
     const handlePress = () => {
         setIconName(isHomeImage ? 'microphone' : 'stop');
-        setBackgroundImage(isHomeImage ? { uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081100289337208963/LightGreen.png' } : { uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1083247153918517268/red.png' });
+       
+        // setBackgroundImage(isHomeImage ? { uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081100289337208963/LightGreen.png' } : { uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1083247153918517268/red.png' });
+        setBGcolor(isHomeImage ? "#90ee90":"#FF7377")
       if (iconName === 'microphone') {
         this.startRecording()
       }
@@ -262,23 +274,23 @@ const MainApp = () =>{
             <Image source={{
                 uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081100252003700786/white.png',
             
-            }}  style={{width: 50,height: 50,position: 'absolute',top:42,left:350,borderRadius: 20,}} />
+            }}  style={{width: 50,height: 50,position: 'absolute',top:42,left:"80%",borderRadius: 20,}} />
 
             <Image source={{
                 uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081100252003700786/white.png',
 
-            }}  style={{width: 414,height: 1000,position: 'absolute',top:260,borderRadius: 65,}} />
+            }}  style={{width: "100%",height: 1000,position: 'absolute',top:220,borderRadius: 65,}} />
 
-            <Image source={{
+            {/* <Image source={{
                 uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081100284392128543/LightPurple.png',
 
-            }}  style={{width: 60,height: 60,position: 'absolute',top:260,left:260,borderRadius: 65,}} />
+            }}  style={{width: 60,height: 60,position: 'absolute',top:260,left:260,borderRadius: 65,}} />  */}
         
 
             <Image source={{
                 uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081100252003700786/white.png',
             
-            }}  style={{width: 350,height: 100,position: 'absolute',top:110,left:30,borderRadius: 20,}} />
+            }}  style={{width: "90%",height: 100,position: 'absolute',top:80,margin:"5%",borderRadius: 20,}} />
 
 
 
@@ -287,19 +299,19 @@ const MainApp = () =>{
                 // uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1082652875135647845/Dustan_labguage_1.png',
                 uri : 'https://user-images.githubusercontent.com/60291649/224925305-407df73b-4520-409a-9f94-077dee674168.png'
             
-            }}  style={{width: 380,height: 100,position: 'absolute',top:335,left:10,}} />
+            }}  style={{width: "100%",height: 100,position: 'absolute',top:350}} />
               )}
 
           {!showGraph && (
               <Image source={{
                 uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1082652961261498418/about_us.png',
             
-            }}  style={{width: 350,height: 100,position: 'absolute',top:440,left:30,borderRadius: 20,}} />
+            }}  style={{width: "90%",height: 100,position: 'absolute',top:460,marginLeft:"5%",borderRadius: 20,}} />
                 )}
             
 
             <Text style={styles.Topic}>
-            Recorded length: {Duration}s
+            Header
             </Text>
 
             <Text style={{top:130,left:120,color: 'black',fontSize:16,}}>
@@ -327,19 +339,22 @@ const MainApp = () =>{
             about us   
             </Text> */}
             
-            <TouchableOpacity onPress={handlePress} style={styles.buttonMicrophone}>
-                <ImageBackground source={backgroundImage} style={styles.image}>
-                <Icon name={iconName} size={80} color="white" />
-                </ImageBackground>
+            <TouchableOpacity onPress={handlePress} style={[styles.buttonMicrophone,colorStylees]}>
+
+                <Icon name={iconName} size={50} color="white" />
             </TouchableOpacity>
 
             <TouchableOpacity onPress={this.selectDocuments} style={styles.buttonFolder}>
                 <Icon name="folder-multiple" size={30} color="black" />
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={this.PlayBack} style={styles.buttonSkip}>
+            <View style={{flex:1,flexDirection:"row",top:0,marginLeft:"10%"}}>
+            <TouchableOpacity onPress={this.PlayBack} style={styles.buttonSkip} >
                 <Icon name="skip-next" size={50} color="white" />
             </TouchableOpacity>
+            <Text style={{flex:4,paddingTop:20}}>Recorded length: {Duration}s</Text>
+            
+            </View>
 
             
 
@@ -359,26 +374,25 @@ const MainApp = () =>{
                   <Text style={styles.buttonTextStyle2}>Learn more</Text>
               </TouchableOpacity>
               )}
+               
             <TouchableOpacity style={styles.button3} 
             activeOpacity={0.8} onPress={this.Upload}  >
-                <Text style={styles.buttonTextStyle3}>O Analyse emotion</Text>
+              <AntDesign  name="dashboard" size={24} color="white" />
+              <Text style={styles.buttonTextStyle3}>Analyse emotion</Text>
             </TouchableOpacity>
             
             {showGraph && (
-         
+            
             <Graph data = {Tdata}/>
-            // <Text style={{top:350,left:110,color: 'black',fontSize:16,}}>
-            // this is {Tdata}
-            // </Text>
          
-          )}
+             )}
 
-            {/* {Loading && (
+            {Loading && !showGraph && (
               <View style={{justifyContent: 'center'}}>
                 <ActivityIndicator size="large" color="#00ff00" style={{marginTop:50}}/>
               </View>
                 
-            )} */}
+            )}
 
         </LinearGradient>
     )
@@ -386,6 +400,7 @@ const MainApp = () =>{
 
 
 const styles = StyleSheet.create({
+    
     container:{ 
         flex:1,
     },
@@ -437,44 +452,67 @@ const styles = StyleSheet.create({
       button3: {
         position:'absolute',
         flexDirection: 'row',
+        justifyContent:'center',
         alignItems: 'center',
         backgroundColor: '#92A3FD',
         borderWidth: 0.5,
         borderColor: '#fff',
         height: 50,
-        width: 270,
+        width: "72%",
         borderRadius: 20,
-        marginTop: 550,
-        marginLeft: 80,
+        margin : "20%",
+        marginTop: 580,
+        margin : "18%",
+        
       },
     buttonTextStyle3: {
         color: 'white',
-        marginBottom: 4,
-        marginLeft: 44,
+        margin:"2%",
+        marginLeft:"4%",
         justifyContent: 'center',
         fontSize:20,
         fontWeight: 'bold'
       },
       image: {
-        alignItems: 'center',
+        
+        borderRadius:20,
+        height:"40%",
+        width:"100%"
       },
       buttonMicrophone: {
-        marginTop: 100,
-        marginLeft: 162,
-        marginRight:162,
+        marginTop: 80,
+        // marginLeft: 162,
+        // marginRight:162,
+        marginLeft:"40%",
+        // padding:20,
+        alignItems:'center',
+        justifyContent:'center',
+        width:"22%",
+        aspectRatio: 1/1,
         borderRadius: 40,
         overflow: 'hidden',
+        // backgroundColor:"#90ee90"
+        // backgroundColor:'white'
       },
       buttonFolder: {
         position:'absolute',
-        marginTop: 50,
-        marginLeft: 360,
+        marginTop: 52,
+        marginLeft: "82%",
         overflow: 'hidden',
       },
       buttonSkip: {
-        position:'absolute',
-        marginTop: 263,
-        marginLeft: 265,
+        // position:'absolute',
+        // marginTop: 263,
+        // marginLeft: "20%",
+        // overflow: 'hidden',
+        flex:1,
+        backgroundColor:"#CBC3E3",
+        marginRight:"5%",
+        justifyContent:'center',
+        alignItems:'center',
+        width:"2%",
+        aspectRatio:1/1,
+        borderRadius: 30,
         overflow: 'hidden',
       },
       WaitImage: {
@@ -484,6 +522,7 @@ const styles = StyleSheet.create({
         top: 0,
         left: 0,
       },
+      
 })
 
 export default MainApp;
