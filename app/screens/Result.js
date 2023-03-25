@@ -1,57 +1,41 @@
 import React from 'react';
 import {View, Text,StyleSheet,Image,TouchableOpacity} from  'react-native'
 import { LinearGradient } from 'expo-linear-gradient';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-
-
+import Graph from '../component/Graph';
+import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 const Result = ({ navigation }) =>{
 
-  const [showImages, setShowImages] = React.useState(false);
-
-  const handleButtonPress = () => {
-    setShowImages(true);
-    console.log('Show image');
-  };
-
-
-  Dummy = async () => {
-    console.log('Hi hi...');
+ const Dummy = async () => {
+      console.log('Hi hi...');
   }
-
-
-  GotoMainApp = async () => {
-    console.log('To MainApp');
-    navigation.navigate('Infantcry');
-  }
-
+  const data = [
+            {
+                value: 50,
+                label: 'One',
+            },
+            {
+                value: 10,
+                label: 'Two',
+            },
+            {
+                value: 40,
+                label: 'Three',
+            },
+            {
+                value: 95,
+                label: 'Four',
+            },
+            {
+                value: 85,
+                label: 'Five',
+            },
+        ]
   
       return (
           <LinearGradient
           colors={['#9DCEFF', '#92A3FD']}
           style={styles.container}>
-        
-        <Image
-          source={{ uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081100252003700786/white.png' }}
-          style={{width: 50,height: 50,position: 'absolute',top:42,left:20,borderRadius: 10,}}
-        /> 
 
-        <TouchableOpacity onPress={this.GotoMainApp} style={{position: 'absolute',top:42,left:20}}>
-          <Icon name="arrow-left-bold" size={50} color="black" />
-        </TouchableOpacity>
-          
-
-        {showImages && (
-        <Image
-          source={{ uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081100299252531232/Pink.png' }}
-          style={styles.overImage}
-        />
-      )}
-        <Image
-          source={{ uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081100252003700786/white.png' }}
-          style={styles.underImage}
-        />
-      
-  
               <Text style={styles.Topic}>
                   InfantCry
               </Text>
@@ -59,14 +43,24 @@ const Result = ({ navigation }) =>{
               <Text style={styles.Topic2}>
                   Result
               </Text>
-
-
-
+              <Image source={{
+                uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081100252003700786/white.png',
+            
+            }}  style={{width: 414,height: 1000,position: 'absolute',top:260,borderRadius: 65,}} />
+             
+              <View style={{flexDirection: 'row',marginLeft: 80}}>
+              <MaterialCommunityIcons name="baby-carriage" size={36} color="black" style={{top:320}} />
+                     <Text style={ styles.TopicGraph}>
+                  Infant emotion
+                    </Text>
+             </View>
+             <Graph data = {data}  />
               <TouchableOpacity style={styles.button} 
-              activeOpacity={0.8} onPress={handleButtonPress}  >
+              activeOpacity={0.8} onPress={Dummy }  >
                   <Text style={styles.buttonTextStyle}>ButtonName</Text>
               </TouchableOpacity>
-          
+
+             
           </LinearGradient>
       )
   }
@@ -94,23 +88,6 @@ const Result = ({ navigation }) =>{
           top: 120,
           left:150,  
         },
-        overImage: {
-          position: 'absolute',
-          zIndex: 1,
-          width: 200,
-          height: 200,
-          top:180,
-          left:50,
-          position: 'absolute',
-        },
-        underImage: {
-          zIndex: 0,
-          width: 300,
-          height: 300,
-          top:180,
-          left:50,
-          position: 'absolute',
-        },
       button: {
           flexDirection: 'row',
           alignItems: 'center',
@@ -134,9 +111,20 @@ const Result = ({ navigation }) =>{
         graph:{
             width: 300,
             height: 300,
+            position: 'absolute',
             top:180,
             left:50,
-            position: 'absolute',
+        },
+        TopicGraph : {
+                
+                // marginLeft:120,
+                marginLeft:20,
+                top:320,
+                justifyContent:'center',
+                alignItems: 'center',
+                fontSize:28,
+                fontWeight: 'bold',
+                
         }
   
     });
