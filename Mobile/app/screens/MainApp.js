@@ -11,6 +11,8 @@ import mime from "mime";
 import Graph from '../component/Graph';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
+import MyText from '../component/MyText';
+import { style } from 'deprecated-react-native-prop-types/DeprecatedViewPropTypes';
 
 
 const initdata = [
@@ -274,12 +276,16 @@ const MainApp = () =>{
             <Image source={{
                 uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081100252003700786/white.png',
             
-            }}  style={{width: 50,height: 50,position: 'absolute',top:42,left:"80%",borderRadius: 20,}} />
+            }}  
+            // style={{width: 50,height: 50,position: 'absolute',top:42,left:"80%",borderRadius: 20,}} />
+            style={{width: '14%',height: '7%',position: 'absolute',top:'6.8%',left:"80%",borderRadius: 20,}} />
 
             <Image source={{
                 uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081100252003700786/white.png',
 
-            }}  style={{width: "100%",height: 1000,position: 'absolute',top:220,borderRadius: 65,}} />
+            }}  
+            // style={{width: "100%",height: 1000,position: 'absolute',top:220,borderRadius: 65,}} />
+            style={{width: "100%",height: '100%',position: 'absolute',top:'36%',borderRadius: 65,}} />
 
             {/* <Image source={{
                 uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081100284392128543/LightPurple.png',
@@ -290,8 +296,11 @@ const MainApp = () =>{
             <Image source={{
                 uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081100252003700786/white.png',
             
-            }}  style={{width: "90%",height: 100,position: 'absolute',top:80,margin:"5%",borderRadius: 20,}} />
-
+            }}  
+            
+            // style={{width: "90%",height: 100,position: 'absolute',top:80,margin:"5%",borderRadius: 20,}} />
+            style={{width: "90%",height: '12.2%',position: 'absolute',top:'12%',margin:"5%",borderRadius: 20,}} />
+            
 
 
             {!showGraph && (
@@ -299,48 +308,57 @@ const MainApp = () =>{
                 // uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1082652875135647845/Dustan_labguage_1.png',
                 uri : 'https://user-images.githubusercontent.com/60291649/224925305-407df73b-4520-409a-9f94-077dee674168.png'
             
-            }}  style={{width: "100%",height: 100,position: 'absolute',top:350}} />
+            }}  
+            
+            // style={{width: "100%",height: 100,position: 'absolute',top:350}} />
+            style={{width: "100%",height: '14%',position: 'absolute',top:'54%'}} />
               )}
 
           {!showGraph && (
               <Image source={{
                 uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1082652961261498418/about_us.png',
             
-            }}  style={{width: "90%",height: 100,position: 'absolute',top:460,marginLeft:"5%",borderRadius: 20,}} />
+            }}  
+            // style={{width: "90%",height: 100,position: 'absolute',top:460,marginLeft:"5%",borderRadius: 20,}} />
+            style={{width: "90%",height: '15%',position: 'absolute',top:'70%',marginLeft:"5%",borderRadius: 20,}} />
                 )}
             
 
-            <Text style={styles.Topic}>
+            
+
+            
+            {/* <Text style={styles.Topic}>
             Header
-            </Text>
+            </Text> */}
+            {/* <Text style={{top:'18%',left:'25%',color: 'black',fontSize:16,paddingTop:"1%"}}>
+            Let’s Record your baby sound and{'\n'}analyse emotion  
+            </Text> */}
 
-            <Text style={{top:130,left:120,color: 'black',fontSize:16,}}>
-            Let’s Record your baby sound and 
-            </Text>
-            <Text style={{top:130,left:120,color: 'black',fontSize:16,}}>
-            analyse emotion  
-            </Text>
+              {/* <Text style={{top:'48%',left:'12%',color: 'white',fontSize:14,}}>
+            What is Dustan baby language ?{'\n'}learn about your baby  
+            </Text> */}
+            <MyText title={'Header'} style={styles.Topic} type="bold"/>
 
-            <Text style={{top:300,left:50,color: 'white',fontSize:14,}}>
-            What is Dustan baby language ? 
-            </Text>
-            <Text style={{top:300,left:50,color: 'white',fontSize:14,}}>
-            learn about your baby  
-            </Text>
+            <MyText title={"Let’s Record your baby sound and\nanalyse emotion"} 
+            style={{top:'18%',left:'25%',color: 'black',fontSize:16,paddingTop:"1%"}} type="thin"/>
+
+            <MyText title={'What is Dustan baby language ?\nlearn about your baby '} 
+            style={{top:'48%',left:'12%',color: 'white',fontSize:14,}} type='thin'/>
             
 
            {!showGraph && (
-             <Text style={{top:380,left:60,color: 'black',fontSize:16,}}>
-             Who are we ? get know
-             </Text>
-           )}
+            //  <Text style={{top:'64%',left:'15%',color: 'black',fontSize:16,}}>
+            //  Who are we ? get know
+            //  </Text>
+            <MyText title={'Who are we ?\n get know about us' } 
+            style={{top:'64%',left:'15%',color: 'black',fontSize:16,}} type='thin'/>
+            )}
 
             {/* <Text style={{top:380,left:110,color: '#92A3FD' ,fontSize:16,}}>
             about us   
             </Text> */}
             
             <TouchableOpacity onPress={handlePress} style={[styles.buttonMicrophone,colorStylees]}>
-
                 <Icon name={iconName} size={50} color="white" />
             </TouchableOpacity>
 
@@ -348,11 +366,11 @@ const MainApp = () =>{
                 <Icon name="folder-multiple" size={30} color="black" />
             </TouchableOpacity>
 
-            <View style={{flex:1,flexDirection:"row",top:0,marginLeft:"10%"}}>
+            <View style={{flex:1,flexDirection:"row",top:"15%",marginLeft:"10%"}}>
             <TouchableOpacity onPress={this.PlayBack} style={styles.buttonSkip} >
                 <Icon name="skip-next" size={50} color="white" />
             </TouchableOpacity>
-            <Text style={{flex:4,paddingTop:20}}>Recorded length: {Duration}s</Text>
+            <Text style={{flex:4,paddingTop:50,marginLeft:"10%",marginTop:"8%",padding:"5%"}}>Recorded length: {Duration}s</Text>
             
             </View>
 
@@ -363,7 +381,8 @@ const MainApp = () =>{
             {!showGraph && (
               <TouchableOpacity style={styles.button1} 
               activeOpacity={0.8} onPress={this.Dummy}  >
-                  <Text style={styles.buttonTextStyle1}>View More</Text>
+                  {/* <Text style={styles.buttonTextStyle1}>View More</Text> */}
+                  <MyText title={'View More'} style={styles.buttonTextStyle1} type='semibold'/>
               </TouchableOpacity>
           )}
 
@@ -371,14 +390,17 @@ const MainApp = () =>{
               {!showGraph && (
                 <TouchableOpacity style={styles.button2} 
               activeOpacity={0.8} onPress={this.Dummy}  >
-                  <Text style={styles.buttonTextStyle2}>Learn more</Text>
+                  {/* <Text style={styles.buttonTextStyle2}>Learn more</Text> */}
+                  <MyText title={'Learn more'} style={styles.buttonTextStyle2} type='semibold'/>
               </TouchableOpacity>
               )}
                
             <TouchableOpacity style={styles.button3} 
             activeOpacity={0.8} onPress={this.Upload}  >
               <AntDesign  name="dashboard" size={24} color="white" />
-              <Text style={styles.buttonTextStyle3}>Analyse emotion</Text>
+              {/* <Text style={styles.buttonTextStyle3}>Analyse emotion</Text>
+               */}
+               <MyText title={'Analyse emotion'} style={styles.buttonTextStyle3} type='bold'/>
             </TouchableOpacity>
             
             {showGraph && (
@@ -401,128 +423,118 @@ const MainApp = () =>{
 
 const styles = StyleSheet.create({
     
-    container:{ 
-        flex:1,
+  container:{ 
+      flex:1,
+  },
+  Topic: {
+      color: 'black',
+      fontSize : 28,
+      position: 'absolute',
+      margin:10,
+      top: '5%',
+      left:'33%',  
     },
-    Topic: {
-        color: 'black',
-        fontSize : 28,
-        fontWeight: 'bold',
-        position: 'absolute',
-        margin:10,
-        top: 20,
-        left:100,  
-      },
-      button1: {
-        position:'absolute',
-        backgroundColor: '#C58BF2',
-        height: 35,
-        width: 100,
-        borderRadius: 20,
-        marginTop: 390,
-        marginLeft: 80,
-      },
-    buttonTextStyle1: {
-        color: 'white',
-        marginTop :5,
-        marginLeft: 10,
-        justifyContent: 'center',
-        fontSize:16,
-        fontWeight: 'bold'
-      },
-      button2: {
-        position:'absolute',
-        backgroundColor: '#92A3FD',
-        borderWidth: 0.5,
-        borderColor: '#fff',
-        height: 35,
-        width: 100,
-        borderRadius: 20,
-        marginTop: 480,
-        marginLeft: 240,
-      },
-    buttonTextStyle2: {
-        color: 'white',
-        marginTop :5,
-        marginLeft: 10,
-        justifyContent: 'center',
-        fontSize:16,
-        fontWeight: 'bold'
-      },
-      button3: {
-        position:'absolute',
-        flexDirection: 'row',
-        justifyContent:'center',
-        alignItems: 'center',
-        backgroundColor: '#92A3FD',
-        borderWidth: 0.5,
-        borderColor: '#fff',
-        height: 50,
-        width: "72%",
-        borderRadius: 20,
-        margin : "20%",
-        marginTop: 580,
-        margin : "18%",
-        
-      },
-    buttonTextStyle3: {
-        color: 'white',
-        margin:"2%",
-        marginLeft:"4%",
-        justifyContent: 'center',
-        fontSize:20,
-        fontWeight: 'bold'
-      },
-      image: {
-        
-        borderRadius:20,
-        height:"40%",
-        width:"100%"
-      },
-      buttonMicrophone: {
-        marginTop: 80,
-        // marginLeft: 162,
-        // marginRight:162,
-        marginLeft:"40%",
-        // padding:20,
-        alignItems:'center',
-        justifyContent:'center',
-        width:"22%",
-        aspectRatio: 1/1,
-        borderRadius: 40,
-        overflow: 'hidden',
-        // backgroundColor:"#90ee90"
-        // backgroundColor:'white'
-      },
-      buttonFolder: {
-        position:'absolute',
-        marginTop: 52,
-        marginLeft: "82%",
-        overflow: 'hidden',
-      },
-      buttonSkip: {
-        // position:'absolute',
-        // marginTop: 263,
-        // marginLeft: "20%",
-        // overflow: 'hidden',
-        flex:1,
-        backgroundColor:"#CBC3E3",
-        marginRight:"5%",
-        justifyContent:'center',
-        alignItems:'center',
-        width:"2%",
-        aspectRatio:1/1,
-        borderRadius: 30,
-        overflow: 'hidden',
-      },
-      WaitImage: {
-        position:'absolute',
-        width: 550,
-        height: 200,
-        top: 0,
-        left: 0,
-      },
+    button1: {
+      position:'absolute',
+      backgroundColor: '#C58BF2',
+      height: '5%',
+      width: '25%',
+      borderRadius: 20,
+      top: '61%',
+      left: '15%',
+    },
+  buttonTextStyle1: {
+      color: 'white',
+      marginTop :5,
+      marginLeft: 10,
+      justifyContent: 'center',
+      fontSize:16,
+    },
+    button2: {
+      position:'absolute',
+      backgroundColor: '#92A3FD',
+      borderWidth: 0.5,
+      borderColor: '#fff',
+      height: '6%',
+      width: '25%',
+      borderRadius: 20,
+      top: '75%',
+      left: '65%',
+    },
+  buttonTextStyle2: {
+      color: 'white',
+      marginTop :5,
+      marginLeft: 10,
+      justifyContent: 'center',
+      fontSize:16,
+    },
+    button3: {
+      position:'absolute',
+      flexDirection: 'row',
+      justifyContent:'center',
+      alignItems: 'center',
+      backgroundColor: '#92A3FD',
+      borderWidth: 0.5,
+      borderColor: '#fff',
+      height: "8%",
+      width: "72%",
+      borderRadius: 20,
+      margin : "20%",
+      top: "78%",
+      margin : "18%",
       
+    },
+  buttonTextStyle3: {
+      color: 'white',
+      margin:"2%",
+      marginLeft:"4%",
+      justifyContent: 'center',
+      fontSize:20,
+     
+    },
+    image: {
+      
+      borderRadius:20,
+      height:"40%",
+      width:"100%"
+    },
+    buttonMicrophone: {
+      top: "15%",
+      left:"40%",
+      alignItems:'center',
+      justifyContent:'center',
+      width:"22%",
+      aspectRatio: 1/1,
+      borderRadius: 40,
+      overflow: 'hidden',
+    },
+    buttonFolder: {
+      position:'absolute',
+      marginTop: 52,
+      marginLeft: "82%",
+      overflow: 'hidden',
+    },
+    buttonSkip: {
+      flex:1,
+      backgroundColor:"#CBC3E3",
+      left:"5%",
+      top:"15%",
+      justifyContent:'center',
+      alignItems:'center',
+      width:"2%",
+      aspectRatio:1/1,
+      borderRadius: 30,
+      marginTop:"5%",
+      overflow: 'hidden',
+    },
+    WaitImage: {
+      position:'absolute',
+      width: '100%',
+      height: '100%',
+      top: '0%',
+      left: '0%',
+    },
+    
 })
 
 export default MainApp;
