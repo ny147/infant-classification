@@ -41,6 +41,7 @@ const MainApp = () =>{
     const [uri,seturi] = React.useState("");
     const [Reason,setReason] = React.useState("") 
     const [Loading,setLoading] = React.useState(false);
+
     const DurationSound = useRef(new Audio.Recording());
 
     const [wavfile,setwavfile] = React.useState();
@@ -164,7 +165,29 @@ const MainApp = () =>{
           console.error(error);
         }
       }
-    
+      const emotionhandle = (reason) =>{
+        let handleMethod = ''
+        switch(reason.toLowerCase()){
+          case 'hungry':
+            handleMethod = 'feed'
+            break;
+          case 'tired':
+            handleMethod = 'test'
+            break;
+          case 'burping':
+            handleMethod = 'test'
+            break;
+          case 'discomfort':
+            handleMethod = 'dd'
+            break;
+          case 'poop':
+            handleMethod = 'dd'
+            break;
+            
+        }
+        return handleMethod;
+      }
+
       Upload = async () => {
 
         // const result = await DocumentPicker.getDocumentAsync({type: '*/*'});
@@ -191,7 +214,7 @@ const MainApp = () =>{
       
         setLoading(true);
         setshowGraph(false);
-        await fetch('http://192.168.1.7:8080/infantcry/0/2',{
+        await fetch('http://192.168.1.8:8080/infantcry/0/2',{
     
             method:'POST',
     
@@ -236,8 +259,9 @@ const MainApp = () =>{
 
 
           setshowGraph(true)
+          const BabyReason = `Babycry Because ${data.Reason} ${emotionhandle(data.Reason)}`
           
-          setReason(data.Reason)
+          setReason(BabyReason)
           setTdata([...newstate])
           console.log(newstate)
           console.log(Reason)
@@ -304,24 +328,16 @@ const MainApp = () =>{
 
 
             {!showGraph && (
-              <Image source={{
-                // uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1082652875135647845/Dustan_labguage_1.png',
+              <Image source = {{
                 uri : 'https://user-images.githubusercontent.com/60291649/224925305-407df73b-4520-409a-9f94-077dee674168.png'
-            
-            }}  
-            
-            // style={{width: "100%",height: 100,position: 'absolute',top:350}} />
-            style={{width: "100%",height: '14%',position: 'absolute',top:'54%'}} />
+                }}  style={{ width: "100%",height: '14%',position: 'absolute',top:'54%' }} />
               )}
 
           {!showGraph && (
-              <Image source={{
+              < Image source={{
                 uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1082652961261498418/about_us.png',
-            
-            }}  
-            // style={{width: "90%",height: 100,position: 'absolute',top:460,marginLeft:"5%",borderRadius: 20,}} />
-            style={{width: "90%",height: '15%',position: 'absolute',top:'70%',marginLeft:"5%",borderRadius: 20,}} />
-                )}
+            }} style={{width: "90%",height: '15%',position: 'absolute',top:'70%',marginLeft:"5%",borderRadius: 20,}} />
+           )}
             
 
             
@@ -339,11 +355,18 @@ const MainApp = () =>{
             </Text> */}
             <MyText title={'Header'} style={styles.Topic} type="bold"/>
 
-            <MyText title={"Let’s Record your baby sound and\nanalyse emotion"} 
-            style={{top:'18%',left:'25%',color: 'black',fontSize:16,paddingTop:"1%"}} type="thin"/>
+            {!showGraph && (
+              <MyText title={"Let’s Record your baby sound \n and analyse emotion"} 
+              style={{top:'16%',left:'25%',color: 'black',fontSize:16,paddingTop:"1%"}} type="regular"/>
+            )}
+
+            {showGraph && (
+              <MyText title={Reason} 
+              style={{top:'18%',left:'25%',color: 'black',fontSize:16,paddingTop:"1%"}} type="thin"/>
+            )}
 
             <MyText title={'What is Dustan baby language ?\nlearn about your baby '} 
-            style={{top:'48%',left:'12%',color: 'white',fontSize:14,}} type='thin'/>
+            style={{top:'48%',left:'12%',color: 'white',fontSize:14,}} type='regular'/>
             
 
            {!showGraph && (
@@ -351,26 +374,28 @@ const MainApp = () =>{
             //  Who are we ? get know
             //  </Text>
             <MyText title={'Who are we ?\n get know about us' } 
-            style={{top:'64%',left:'15%',color: 'black',fontSize:16,}} type='thin'/>
+            style={{top:'60%',left:'15%',color: 'black',fontSize:16,}} type='thin'/>
             )}
 
             {/* <Text style={{top:380,left:110,color: '#92A3FD' ,fontSize:16,}}>
             about us   
             </Text> */}
             
-            <TouchableOpacity onPress={handlePress} style={[styles.buttonMicrophone,colorStylees]}>
-                <Icon name={iconName} size={50} color="white" />
-            </TouchableOpacity>
+            
 
             <TouchableOpacity onPress={this.selectDocuments} style={styles.buttonFolder}>
                 <Icon name="folder-multiple" size={30} color="black" />
             </TouchableOpacity>
 
-            <View style={{flex:1,flexDirection:"row",top:"15%",marginLeft:"10%"}}>
+            <TouchableOpacity onPress={handlePress} style={[styles.buttonMicrophone,colorStylees]}>
+                <Icon name={iconName} size={50} color="white" />
+            </TouchableOpacity>
+
+            <View style={{flex:1,flexDirection:"row",top:"10%",marginLeft:"10%"}}>
             <TouchableOpacity onPress={this.PlayBack} style={styles.buttonSkip} >
                 <Icon name="skip-next" size={50} color="white" />
             </TouchableOpacity>
-            <Text style={{flex:4,paddingTop:50,marginLeft:"10%",marginTop:"8%",padding:"5%"}}>Recorded length: {Duration}s</Text>
+            <Text style={{flex:4,paddingTop:"10%",marginLeft:"10%",marginTop:"5%",padding:"5%"}}>Recorded length: {Duration}s</Text>
             
             </View>
 
@@ -382,7 +407,7 @@ const MainApp = () =>{
               <TouchableOpacity style={styles.button1} 
               activeOpacity={0.8} onPress={this.Dummy}  >
                   {/* <Text style={styles.buttonTextStyle1}>View More</Text> */}
-                  <MyText title={'View More'} style={styles.buttonTextStyle1} type='semibold'/>
+                  <MyText title={'View more'} style={styles.buttonTextStyle1} type='semibold'/>
               </TouchableOpacity>
           )}
 
@@ -405,7 +430,10 @@ const MainApp = () =>{
             
             {showGraph && (
             
-            <Graph data = {Tdata}/>
+            // <Graph data = {Tdata}/>
+            <Image source = {{
+              uri : 'https://user-images.githubusercontent.com/60291649/224925305-407df73b-4520-409a-9f94-077dee674168.png'
+              }}  style={{ width: "100%",height: '14%',position: 'absolute',top:'54%' }} />
          
              )}
 
@@ -438,17 +466,19 @@ const styles = StyleSheet.create({
       position:'absolute',
       backgroundColor: '#C58BF2',
       height: '5%',
-      width: '25%',
+      width: '23%',
       borderRadius: 20,
-      top: '61%',
+      top: '62%',
       left: '15%',
     },
   buttonTextStyle1: {
       color: 'white',
-      marginTop :5,
-      marginLeft: 10,
       justifyContent: 'center',
-      fontSize:16,
+      alignItems: 'center',
+      fontSize:12,
+      marginLeft:'5%',
+      marginTop:'6%',
+      paddingLeft:'5%'
     },
     button2: {
       position:'absolute',
@@ -463,10 +493,10 @@ const styles = StyleSheet.create({
     },
   buttonTextStyle2: {
       color: 'white',
-      marginTop :5,
-      marginLeft: 10,
       justifyContent: 'center',
-      fontSize:16,
+      alignSelf: 'center',
+      marginTop:'10%',
+      fontSize:12,
     },
     button3: {
       position:'absolute',
@@ -499,7 +529,7 @@ const styles = StyleSheet.create({
       width:"100%"
     },
     buttonMicrophone: {
-      top: "15%",
+      top: "10%",
       left:"40%",
       alignItems:'center',
       justifyContent:'center',
@@ -518,7 +548,7 @@ const styles = StyleSheet.create({
       flex:1,
       backgroundColor:"#CBC3E3",
       left:"5%",
-      top:"15%",
+      top:"5%",
       justifyContent:'center',
       alignItems:'center',
       width:"2%",
