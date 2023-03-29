@@ -169,9 +169,9 @@ const MainApp = () =>{
 
             <View style={{flex:1,flexDirection:"row",top:'0%',marginLeft:"10%"}}>
             <TouchableOpacity onPress={this.PlayBack} style={styles.buttonSkip} >
-                <Icon name="skip-next" size={50} color="white" />
+                <Icon name="skip-next" size={30} color="white" />
             </TouchableOpacity>
-            <Text style={{top:'30%',left:'12%',flex:4}}>Recorded length: {Duration}s</Text>
+            <Text style={{top:'35%',left:'25%',position: 'absolute',flex:4}}>Recorded length: {Duration}s</Text>
             
             </View>
 
@@ -299,32 +299,31 @@ const styles = StyleSheet.create({
         width:"100%"
       },
       buttonMicrophone: {
-        top: "15%",
+        top: "29%",
         left:"40%",
         alignItems:'center',
         justifyContent:'center',
         width:"22%",
         aspectRatio: 1/1,
         borderRadius: 40,
-        overflow: 'hidden',
+        position: 'absolute'
       },
       buttonFolder: {
         position:'absolute',
         marginTop: 52,
         marginLeft: "82%",
-        overflow: 'hidden',
       },
       buttonSkip: {
         flex:1,
         backgroundColor:"#CBC3E3",
         left:"5%",
-        top:"15%",
+        top:"30%",
         justifyContent:'center',
         alignItems:'center',
-        width:"2%",
+        width:"15%",
         aspectRatio:1/1,
         borderRadius: 30,
-        overflow: 'hidden',
+        position: 'absolute'
       },
       WaitImage: {
         position:'absolute',
