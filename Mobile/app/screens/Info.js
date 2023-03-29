@@ -17,11 +17,11 @@ const Info = () =>{
             <Mytext title=" Dustan Baby Language" style={styles.Topic} type="bold"/>
 
             <Image source={{uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081100299252531232/Pink.png'}}  
-            style={{width: '14%',height: '9%',position: 'absolute',top:'41.5%',left:'3%',borderRadius: 65,}} />
+            style={{width: '14%',height: '8%',position: 'absolute',top:'41.5%',left:'3%',borderRadius: 65,}} />
            
 
             <Mytext title="Neh" 
-            style={{top:'44%',left:'6%',color: 'white',fontSize:18,position: 'absolute'}} 
+            style={{top:'43.5%',left:'5.5%',color: 'white',fontSize:18,position: 'absolute'}} 
             type="semibold"/>
 
           
@@ -36,15 +36,15 @@ const Info = () =>{
             type="thin"/>
 
             <Image source={{uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081100299252531232/Pink.png'}}  
-            style={{width: '14%',height: '9%',position: 'absolute',top:'51.5%',left:'3%',borderRadius: 65,}} />
+            style={{width: '13.5%',height: '7.5%',position: 'absolute',top:'52%',left:'3%',borderRadius: 65,}} />
          
             <Mytext title={'Earih'}
-            style={{top:'54%',left:'5%',color: 'white',fontSize:18,fontWeight: 'bold',position: 'absolute'}} 
+            style={{top:'54%',left:'4.8%',color: 'white',fontSize:18,fontWeight: 'bold',position: 'absolute'}} 
             type="semibold"/>
 
        
             <Mytext title={'Poop'}
-            style={{top:'43%',left:'18%',color: 'black',fontSize:16,fontWeight: 'bold'}} 
+            style={{top:'43%',left:'18%',color: 'black',fontSize:16}} 
             type="medium"/>
 
        
@@ -55,16 +55,16 @@ const Info = () =>{
 
 
             <Image source={{uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081100299252531232/Pink.png'}}  
-            style={{width: '14%',height: '9%',position: 'absolute',top:'62.5%',left:'3%',borderRadius: 65,}} />
+            style={{width: '14%',height: '8%',position: 'absolute',top:'62.5%',left:'3%',borderRadius: 65,}} />
             
 
             <Mytext title={'Owh'}
-            style={{top:'65%',left:'5%',color: 'white',fontSize:18,fontWeight: 'bold',position: 'absolute'}} type= "semibold" />
+            style={{top:'64.5%',left:'5%',color: 'white',fontSize:18,fontWeight: 'bold',position: 'absolute'}} type= "semibold" />
 
             
 
             <Mytext title={'Tried'}
-            style={{top:'43%',left:'18%',color: 'black',fontSize:16,fontWeight: 'bold'}} type= "medium" />
+            style={{top:'43%',left:'18%',color: 'black',fontSize:16}} type= "medium" />
 
 
            
@@ -75,10 +75,10 @@ const Info = () =>{
 
 
             <Image source={{uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081100299252531232/Pink.png'}}  
-            style={{width: '14%',height: '9%',position: 'absolute',top:'73%',left:'3%',borderRadius: 65,}} />
+            style={{width: '14%',height: '8%',position: 'absolute',top:'73%',left:'3%',borderRadius: 65,}} />
             
             <Mytext title={'Heh'}
-            style={{top:'75.5%',left:'6%',color: 'white',fontSize:18,position: 'absolute'}} type= "semibold" />
+            style={{top:'75%',left:'5.5%',color: 'white',fontSize:18,position: 'absolute'}} type= "semibold" />
 
           
 
@@ -94,13 +94,13 @@ const Info = () =>{
 
 
             <Image source={{uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081100299252531232/Pink.png'}}  
-            style={{width: '14%',height: '9%',position: 'absolute',top:'83.5%',left:'3%',borderRadius: 65,}} />
+            style={{width: '14%',height: '8%',position: 'absolute',top:'83.5%',left:'3%',borderRadius: 65,}} />
           
 
             
           
             <Mytext title={'Eh'}
-            style={{top:'86%',left:'7.5%',color: 'white',fontSize:18,position: 'absolute'}} type= "semibold" />
+            style={{top:'85.5%',left:'7.5%',color: 'white',fontSize:18,position: 'absolute'}} type= "semibold" />
 
 
             <Mytext title={'Burping'}

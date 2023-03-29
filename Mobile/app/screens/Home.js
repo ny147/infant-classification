@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         margin:20,
         top: 280,
-        marginLeft:"40%" ,
+        marginLeft:"35%" ,
         
       },
       Topic2: {
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         margin:20,
         top: 320,
-        marginLeft:"40%"
+        marginLeft:"35%"
       },
     button: {
         flexDirection: 'row',
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     buttonTextStyle: {
         color: '#92A3FD',
         margin: "2%",
-        marginLeft: "30%",
+        marginLeft: "25%",
         justifyContent: 'center',
         fontSize:28,
         // fontWeight: 'bold',
