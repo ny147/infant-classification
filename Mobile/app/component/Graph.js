@@ -35,7 +35,7 @@ class Graph extends React.PureComponent {
             // console.log(data)
 
         return (
-            <View style={{flexDirection: 'row',height: "30%" ,top :"70%" , marginLeft : 10,marginRight : 20,padding:0}}>
+            <View style={{flexDirection: 'row',height: "30%" ,top :"75%" , marginLeft : 10,marginRight : 20,padding:0}}>
                 <YAxis
                     data={data}
                     yAccessor={({ index }) => index}

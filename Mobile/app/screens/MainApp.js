@@ -13,7 +13,7 @@ import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import MyText from '../component/MyText';
 import { style } from 'deprecated-react-native-prop-types/DeprecatedViewPropTypes';
-
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const initdata = [
   {
@@ -28,7 +28,7 @@ const initdata = [
 
 
 
-const MainApp = () =>{
+const MainApp = ({ navigation }) =>{
     const [iconName, setIconName] = React.useState('microphone');
     const [backgroundImage, setBackgroundImage] = React.useState({ uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1081100289337208963/LightGreen.png' });
     const [BGcolor,setBGcolor] = React.useState("#90ee90")
@@ -41,7 +41,7 @@ const MainApp = () =>{
     const [uri,seturi] = React.useState("");
     const [Reason,setReason] = React.useState("") 
     const [Loading,setLoading] = React.useState(false);
-
+    // const  DurationSound = new Audio.Recording()
     const DurationSound = useRef(new Audio.Recording());
 
     const [wavfile,setwavfile] = React.useState();
@@ -49,11 +49,16 @@ const MainApp = () =>{
     const colorStylees ={
       backgroundColor:BGcolor,
     }
+  //   Dummy = async () => {
+  //     console.log('Hi hi...');
+  //     navigation.navigate('Infantcry');
+  //     console.log('Hi hi2...');
+  // }
    
    
     
-    Dummy = async () => {
-        console.log('Hi hi...');
+    DustanPage = async () => {
+      navigation.navigate('Info');
     }
     Dummy2 = async () => {
         console.log('Hi hi2...');
@@ -169,19 +174,19 @@ const MainApp = () =>{
         let handleMethod = ''
         switch(reason.toLowerCase()){
           case 'hungry':
-            handleMethod = 'feed'
+            handleMethod = 'feeding breast milk or formula to him/her'
             break;
           case 'tired':
-            handleMethod = 'test'
+            handleMethod = 'take him/her to sleep'
             break;
           case 'burping':
-            handleMethod = 'test'
+            handleMethod = 'hold them \nupright and gently pat or rub their back'
             break;
           case 'discomfort':
-            handleMethod = 'dd'
+            handleMethod = 'Check him/her diaper and change it.'
             break;
           case 'poop':
-            handleMethod = 'dd'
+            handleMethod = 'change their diaper promptly.'
             break;
             
         }
@@ -214,7 +219,7 @@ const MainApp = () =>{
       
         setLoading(true);
         setshowGraph(false);
-        await fetch('http://192.168.1.4:8080/infantcry/0/2',{
+        await fetch('http://192.168.1.7:8080/infantcry/0/2',{
     
             method:'POST',
     
@@ -357,16 +362,17 @@ const MainApp = () =>{
               {/* <Text style={{top:'48%',left:'12%',color: 'white',fontSize:14,}}>
             What is Dustan baby language ?{'\n'}learn about your baby  
             </Text> */}
-            <MyText title={'Header'} style={styles.Topic} type="bold"/>
+            <MyText title={'Record'} style={styles.Topic} type="bold"/>
 
             {!showGraph && (
               <MyText title={"Let’s Record your baby sound \n and analyse emotion"} 
-              style={{top:'16%',left:'25%',color: 'black',fontSize:16,paddingTop:"1%"}} type="regular"/>
+              style={{top:'16%',left:'18%',color: 'black',fontSize:16,paddingTop:"1%"}} type="regular"/>
             )}
 
+      
             {showGraph && (
               <MyText title={Reason} 
-              style={{top:'18%',left:'25%',color: 'black',fontSize:16,paddingTop:"1%"}} type="thin"/>
+              style={{top:'18%',left:'25%',color: 'black',fontSize:12,paddingTop:"1%"}} type="regular"/>
             )}
 
             <MyText title={'What is Dustan baby language ?\nlearn about your baby '} 
@@ -409,7 +415,7 @@ const MainApp = () =>{
 
             {!showGraph && (
               <TouchableOpacity style={styles.button1} 
-              activeOpacity={0.8} onPress={this.Dummy}  >
+              activeOpacity={0.8} onPress={this.DustanPage}  >
                   {/* <Text style={styles.buttonTextStyle1}>View More</Text> */}
                   <MyText title={'View more'} style={styles.buttonTextStyle1} type='semibold'/>
               </TouchableOpacity>
