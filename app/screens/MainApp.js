@@ -116,9 +116,9 @@ const MainApp = () =>{
             {!showGraph && (
               <Image source={{
                 // uri: 'https://cdn.discordapp.com/attachments/1080379783323582464/1082652875135647845/Dustan_labguage_1.png',
-                uri : 'https://user-images.githubusercontent.com/60291649/224925305-407df73b-4520-409a-9f94-077dee674168.png'
+                uri : 'https://cdn.discordapp.com/attachments/1080379783323582464/1090664324642648154/92a3fd.png'
             
-            }}  style={{width: "100%",height: '14%',position: 'absolute',top:'54%'}} />
+            }}  style={{width: "90%",height: '14%',position: 'absolute',top:'54%',left:'5%',borderRadius: 20}} />
               )}
 
           {!showGraph && (
